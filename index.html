@@ -11,7 +11,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23060A18'/%3E%3Cpath d='M6 24 C10 10 22 10 26 24' stroke='%233DF5A7' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='9' r='2.4' fill='%23EAF2FF'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;600&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --night:#060A18;
@@ -111,7 +111,7 @@ input[type=range]{width:100%;accent-color:var(--green);height:28px}
 /* shihab */
 .shihab-grid{display:grid;grid-template-columns:5fr 7fr;gap:56px;align-items:center}
 #mirror{width:100%;aspect-ratio:4/3;display:block;border-radius:26px;border:1px solid var(--line);background:#040714;cursor:pointer}
-.shihab-word{font-family:var(--ar);font-size:clamp(4rem,9vw,8rem);line-height:1;color:var(--snow);direction:rtl;display:block;text-align:left;margin-bottom:8px;background:linear-gradient(90deg,var(--teal),var(--green),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.shihab-word{font-family:var(--disp);font-weight:800;letter-spacing:-0.05em;font-size:clamp(3.6rem,8vw,7rem);line-height:1;color:var(--snow);display:block;margin-bottom:18px;background:linear-gradient(90deg,var(--teal),var(--green),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
 .hint{font-size:.88rem;color:var(--mist);margin-top:12px}
 
 /* proof */
@@ -191,7 +191,6 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
     <div class="hero-copy">
       <div>
         <h1>Every movement leaves a trace.</h1>
-        <div class="ar-line ar" lang="ar">كل حركة تترك أثرًا</div>
         <p class="lede">Axiora turns an ordinary phone or laptop camera into a measurement tool for home physiotherapy. The patient exercises; the therapist finally sees what happened.</p>
         <div class="cta">
           <a class="btn fill" href="#lab">Try the measurement</a>
@@ -213,7 +212,6 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
     <div class="wrap">
       <div class="intro">
         <div>
-          <span class="kicker" lang="ar">الساعات الغائبة</span>
           <h2>Twelve of fourteen days happen in the dark.</h2>
         </div>
         <p>A patient sees the therapist, then goes home with an exercise sheet. Until the next visit, nobody knows how far the arm went, how many reps were real, or whether the trunk did the work. Switch the view to see what Axiora adds.</p>
@@ -238,7 +236,6 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
     <div class="wrap">
       <div class="intro">
         <div>
-          <span class="kicker" lang="ar">لا يمكن خداعه</span>
           <h2>Try to cheat the camera.</h2>
         </div>
         <p>A simple pose tracker measures the arm against the edge of the picture, so leaning sideways makes the arm look higher. Axiora measures against the patient's own trunk, the way the International Society of Biomechanics defines it, and names the compensation.</p>
@@ -279,11 +276,11 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
     <div class="wrap">
       <div class="shihab-grid">
         <div>
-          <span class="shihab-word" lang="ar">شِهاب</span>
+          <span class="shihab-word">Shihab</span>
           <h2 style="font-size:clamp(1.6rem,3vw,2.4rem)">The exercise becomes a meteor shower.</h2>
           <p style="color:var(--mist);margin-top:22px">Shihab shows patients their own body as light, with a path for where the arm should go. A clean repetition shatters a crystal into sparks.</p>
           <p style="color:var(--mist)">A compensation doesn't cost points. The part of the body doing the cheating glows red, so the patient knows what to fix. We chose this because research on rehab games found that point penalties do little to reduce compensation.</p>
-          <p style="color:var(--mist)">Instructions are written in Arabic first.</p>
+          <p style="color:var(--mist)">On-screen instructions are written in Arabic first.</p>
         </div>
         <div>
           <canvas id="mirror" aria-label="Shihab demo: click to perform a repetition and break the crystal" role="img"></canvas>
@@ -297,7 +294,6 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
     <div class="wrap">
       <div class="intro">
         <div>
-          <span class="kicker" lang="ar">الأرقام كما هي</span>
           <h2>Results, including the miss.</h2>
         </div>
         <p>Tested on public rehabilitation datasets with motion-capture ground truth and in live sessions. We set the accuracy target before running the test, and we publish the result either way.</p>
@@ -325,7 +321,6 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
     <div class="wrap">
       <div class="intro">
         <div>
-          <span class="kicker" lang="ar">رحلة الجلسة</span>
           <h2>One session, start to finish.</h2>
         </div>
         <p>The first three steps run today. The therapist dashboard is what we build next.</p>
@@ -350,7 +345,6 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
     <div class="wrap">
       <div class="founder">
         <div>
-          <span class="kicker" lang="ar">من يبنيه</span>
           <p class="quote">Measuring human movement is a robotics problem. The camera in every patient's pocket is good enough to start.</p>
         </div>
         <div>
@@ -372,7 +366,6 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
 
 <footer>
   <div class="wrap">
-    <span class="ar" lang="ar">أورورا للتقنيات · أبوظبي</span>
     <p>Axiora is an early-stage research prototype. It is not a medical device and does not diagnose or treat any condition. Exercise programmes should be set and supervised by a licensed physiotherapist.</p>
     <p>© 2026 Aurora Technologies, Abu Dhabi.</p>
   </div>
@@ -605,7 +598,7 @@ function mirrorFrame(t){
   mx.moveTo(cx,hip); mx.lineTo(cx-28*k,hip+80*k); mx.moveTo(cx,hip); mx.lineTo(cx+28*k,hip+80*k);
   mx.stroke(); mx.beginPath(); mx.arc(cx,sh-44*k,24*k,0,Math.PI*2); mx.stroke(); mx.shadowBlur=0;
   if (shrug){ mx.fillStyle='rgba(255,92,154,.55)'; mx.shadowColor='#FF5C9A'; mx.shadowBlur=30; mx.beginPath(); mx.arc(lsx,lsy,20*k,0,Math.PI*2); mx.fill(); mx.shadowBlur=0;
-    mx.fillStyle='#FFD3E4'; mx.font=`600 ${15*k}px "IBM Plex Sans Arabic", sans-serif`; mx.textAlign='center'; mx.direction='rtl'; mx.fillText('أرخِ كتفك', lsx, lsy-34*k); mx.direction='ltr'; }
+    mx.fillStyle='#FFD3E4'; mx.font=`600 ${15*k}px "IBM Plex Sans", sans-serif`; mx.textAlign='center'; mx.fillText('Relax your shoulder', lsx, lsy-34*k); }
   // hit
   if (anim && !anim.hit && !anim.shrug && Math.hypot(wx-tx,wy-ty) < 24*k){ anim.hit=true; crystal=false;
     for(let i=0;i<70;i++){ const ang=Math.random()*Math.PI*2, sp=1+Math.random()*5; sparks.push({x:tx,y:ty,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,l:1,c:i%3}); }
