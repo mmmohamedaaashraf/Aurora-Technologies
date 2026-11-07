@@ -293,7 +293,7 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
         </div>
         <div>
           <div class="mirror-wrap"><canvas id="mirror3d" aria-hidden="true"></canvas><canvas id="mirror" aria-label="Shihab demo: click to perform a repetition and break the crystal" role="img"></canvas></div>
-          <p class="hint">Click or tap the mirror to do a repetition. Every third one, the figure shrugs.</p>
+          <p class="hint">Click or tap the mirror to do a repetition. Every third rep, the figure hikes its shoulder to get the arm up.</p>
         </div>
       </div>
     </div>
@@ -481,14 +481,14 @@ const hues = [[61,245,167],[34,211,238],[139,92,246]];
 
 const REP=5600, easeIO=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
 function heroState(t){
-  const n=Math.floor(t/REP), c=t%REP, cheat=n%3===2, peak=cheat?120:150;
+  const n=Math.floor(t/REP), c=t%REP, cheat=n%3===2, peak=cheat?72:90;
   let a, phase;
   if (c<1900){ a=peak*easeIO(c/1900); phase='raise'; }
   else if (c<2700){ a=peak; phase='hold'; }
   else if (c<4600){ a=peak*(1-easeIO((c-2700)/1900)); phase='lower'; }
   else { a=0; phase='rest'; }
   let shrug=0;
-  if (cheat){ if(phase==='raise') shrug=Math.min(1,Math.max(0,(a-55)/45)); else if(phase==='hold') shrug=1; else if(phase==='lower') shrug=Math.min(1,Math.max(0,(a-30)/50)); }
+  if (cheat){ if(phase==='raise') shrug=Math.min(1,Math.max(0,(a-35)/45)); else if(phase==='hold') shrug=1; else if(phase==='lower') shrug=Math.min(1,Math.max(0,(a-20)/45)); }
   return {n,a,shrug,cheat,phase};
 }
 function figure(t){
@@ -640,14 +640,14 @@ function mirrorFrame(t){
   let a=0, shrug=0;
   if (anim){ const c=t-anim.t0;
     if (c<1300) a=anim.peak*easeIO(c/1300); else if (c<1800) a=anim.peak; else if (c<3100) a=anim.peak*(1-easeIO((c-1800)/1300)); else { a=0; anim=null; }
-    if (anim && anim.shrug){ shrug = c<1300 ? Math.min(1,Math.max(0,(a-55)/45)) : c<1800 ? 1 : Math.min(1,Math.max(0,(a-30)/50)); } }
+    if (anim && anim.shrug){ shrug = c<1300 ? Math.min(1,Math.max(0,(a-35)/45)) : c<1800 ? 1 : Math.min(1,Math.max(0,(a-20)/45)); } }
   AX.mirror={arm:a,shrug};
   let base, REACH, wx, wy, lsx, lsy;
   if (AX.ready && AX.mproj){ base=AX.mproj.shoulder0; REACH=AX.mproj.reach; [wx,wy]=AX.mproj.hand; [lsx,lsy]=AX.mproj.shoulder; }
   else { const P=pose(cx,hip,k,{arm:a,shrug}); base=pose(cx,hip,k,{arm:0}).ls; REACH=222*k; [wx,wy]=P.tip; [lsx,lsy]=P.ls; if(!AX.ready) drawBody(mx,P,k,{flag:shrug, alpha:.75}); }
-  const tx=base[0]+REACH*Math.sin(rad(150)), ty=base[1]+REACH*Math.cos(rad(150));
+  const tx=base[0]+REACH*Math.sin(rad(90)), ty=base[1]+REACH*Math.cos(rad(90));
   mx.setLineDash([4,8]); mx.strokeStyle='rgba(242,179,61,.75)'; mx.lineWidth=2; mx.beginPath();
-  for(let d=0; d<=150; d+=3){ const x=base[0]+REACH*Math.sin(rad(d)), y=base[1]+REACH*Math.cos(rad(d)); d?mx.lineTo(x,y):mx.moveTo(x,y); } mx.stroke(); mx.setLineDash([]);
+  for(let d=0; d<=90; d+=3){ const x=base[0]+REACH*Math.sin(rad(d)), y=base[1]+REACH*Math.cos(rad(d)); d?mx.lineTo(x,y):mx.moveTo(x,y); } mx.stroke(); mx.setLineDash([]);
   if (crystal){
     const pulse=1+.08*Math.sin(t/300); mx.save(); mx.translate(tx,ty); mx.rotate(t/900); mx.scale(pulse,pulse);
     const g=mx.createLinearGradient(-16,-16,16,16); g.addColorStop(0,'#22D3EE'); g.addColorStop(1,'#8B5CF6');
@@ -656,7 +656,7 @@ function mirrorFrame(t){
   if (shrug){ mx.fillStyle='rgba(255,92,154,.35)'; mx.shadowColor='#FF5C9A'; mx.shadowBlur=30; mx.beginPath(); mx.arc(lsx,lsy,20*k*1.4,0,Math.PI*2); mx.fill(); mx.shadowBlur=0;
     mx.fillStyle='#FFD3E4'; mx.font=`600 ${15*k*1.3}px "IBM Plex Sans", sans-serif`; mx.textAlign='center'; mx.fillText('Relax your shoulder', lsx, lsy-48*k); }
   // hit
-  if (anim && !anim.hit && !anim.shrug && Math.hypot(wx-tx,wy-ty) < 40*k){ anim.hit=true; crystal=false;
+  if (anim && !anim.hit && !anim.shrug && Math.hypot(wx-tx,wy-ty) < REACH*0.12){ anim.hit=true; crystal=false;
     for(let i=0;i<70;i++){ const ang=Math.random()*Math.PI*2, sp=1+Math.random()*5; sparks.push({x:tx,y:ty,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,l:1,c:i%3}); }
     setTimeout(()=>crystal=true, 1400);
   }
@@ -668,7 +668,7 @@ function mirrorFrame(t){
   mx.fillStyle='rgba(234,242,255,.85)'; mx.font=`600 ${14*k}px Unbounded, sans-serif`; mx.textAlign='left';
   mx.fillText(`Reps ${rep}`, 18*k, 30*k);
 }
-function doRep(){ if (anim) return; rep++; const sh = rep%3===0; anim={t0:performance.now(), peak: sh?118:150, shrug: sh, hit:false}; }
+function doRep(){ if (anim) return; rep++; const sh = rep%3===0; anim={t0:performance.now(), peak: sh?72:90, shrug: sh, hit:false}; }
 mc.addEventListener('click', doRep);
 mc.tabIndex=0; mc.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); doRep(); } });
 let mvis=false; new IntersectionObserver(e=>{ mvis=e[0].isIntersecting; if(mvis && !reduce && rep===0) setTimeout(doRep,600); }).observe(mc);
@@ -701,10 +701,10 @@ function makeModel(){
   return {m,b,base,flag,sk};
 }
 function setPose(M,{arm=0,lean=0,shrug=0}){
-  M.b.LeftArm.rotation.z = M.base.la + (arm-93)*D;
-  M.b.RightArm.rotation.z = M.base.ra + 93*D;
+  M.b.LeftArm.rotation.z = M.base.la + (arm-84)*D;
+  M.b.RightArm.rotation.z = M.base.ra + 82*D;
   M.b.Spine.rotation.z = M.base.sp + lean*D;
-  M.b.LeftShoulder.rotation.z = M.base.sh + 18*shrug*D;
+  M.b.LeftShoulder.rotation.z = M.base.sh + 30*shrug*D;
   M.m.updateMatrixWorld(true);
   if (M.scene) M.sk.update(M.scene);
   M.flag.visible = shrug>.3;
