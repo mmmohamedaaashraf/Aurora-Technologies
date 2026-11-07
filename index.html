@@ -3,429 +3,628 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aurora Technologies | Axiora, camera-based physiotherapy measurement</title>
-<meta name="description" content="Aurora Technologies builds Axiora, which turns an ordinary phone or laptop camera into a measurement tool for home physiotherapy: joint angles, repetitions and compensations, for the patient and the therapist.">
+<title>Aurora Technologies | Every movement leaves a trace</title>
+<meta name="description" content="Aurora Technologies builds Axiora: AI physiotherapy measurement with an ordinary phone or laptop camera. Joint angles, graded repetitions and compensation warnings for home rehab.">
 <meta property="og:title" content="Aurora Technologies | Axiora">
-<meta property="og:description" content="Home rehab exercises, measured with an ordinary camera. Built in Abu Dhabi.">
-<meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2313293D'/%3E%3Cpath d='M9 24 L16 8 L23 24' stroke='%2312B5CB' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='8' r='2.6' fill='%23F2B33D'/%3E%3C/svg%3E">
+<meta property="og:description" content="Every movement leaves a trace. Home rehab, measured with the camera you already own.">
+<meta name="theme-color" content="#060A18">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23060A18'/%3E%3Cpath d='M6 24 C10 10 22 10 26 24' stroke='%233DF5A7' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='9' r='2.4' fill='%23EAF2FF'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;700&family=Familjen+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;600&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#F1F4F3;
-  --ink:#13293D;
-  --slate:#55687A;
-  --line:#CFD9DD;
-  --panel:#0F2234;
-  --track:#12B5CB;
-  --target:#F2B33D;
-  --flag:#E0457B;
-  --ok:#2E9E6B;
-  --display:"Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
-  --body:"Atkinson Hyperlegible Next", "Atkinson Hyperlegible", "Segoe UI", Arial, sans-serif;
-  --wrap:1180px;
+  --night:#060A18;
+  --night2:#0B1230;
+  --snow:#EAF2FF;
+  --mist:#9FB0D4;
+  --green:#3DF5A7;
+  --teal:#22D3EE;
+  --violet:#8B5CF6;
+  --flag:#FF5C9A;
+  --line:rgba(234,242,255,.12);
+  --disp:"Unbounded", "Arial Black", sans-serif;
+  --body:"IBM Plex Sans", "Segoe UI", Arial, sans-serif;
+  --ar:"Reem Kufi", "IBM Plex Sans Arabic", sans-serif;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--night);color:var(--snow);font-family:var(--body);font-size:18px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit}
-a:focus-visible,button:focus-visible{outline:3px solid var(--track);outline-offset:3px;border-radius:4px}
-.wrap{max-width:var(--wrap);margin:0 auto;padding:0 28px}
-h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-0.015em;margin:0}
-h1{font-size:clamp(2.4rem,4.3vw,3.6rem);line-height:1.02;letter-spacing:-0.03em}
-h2{font-size:clamp(1.8rem,3.2vw,2.6rem);line-height:1.1}
-h3{font-size:1.22rem;line-height:1.25}
-p{margin:0 0 1em;max-width:62ch}
-.lede{font-size:1.22rem;color:var(--slate);max-width:44ch}
-.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:#fff;padding:8px 14px;border-radius:6px;z-index:10}
-.skip:focus{left:12px}
+:focus-visible{outline:3px solid var(--green);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+p{margin:0 0 1em;max-width:60ch}
+h1,h2,h3{margin:0;font-family:var(--disp);font-weight:600;letter-spacing:-0.02em}
+h2{font-size:clamp(2rem,4.2vw,3.6rem);line-height:1.05}
+h3{font-size:1.15rem;line-height:1.3}
+.ar{font-family:var(--ar);direction:rtl}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:var(--snow);color:var(--night);padding:8px 14px;border-radius:8px;z-index:20}
 
-/* header */
-.top{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-0.02em}
-.brand svg{width:30px;height:30px}
-.top nav{display:flex;gap:26px;font-size:.98rem}
-.top nav a{text-decoration:none;color:var(--slate)}
-.top nav a:hover{color:var(--ink)}
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;isolation:isolate}
+#sky{position:absolute;inset:0;width:100%;height:100%;z-index:-1;display:block}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:30vh;background:linear-gradient(transparent,var(--night));z-index:-1;pointer-events:none}
+.top{display:flex;justify-content:space-between;align-items:center;padding:26px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-family:var(--disp);font-weight:600;font-size:1.02rem;letter-spacing:.01em}
+.brand svg{width:34px;height:34px}
+.top nav{display:flex;gap:28px;font-size:.95rem;color:var(--mist)}
+.top nav a{text-decoration:none}.top nav a:hover{color:var(--snow)}
+.hero-copy{margin-top:auto;padding-bottom:9vh;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end}
+.hero h1{font-size:clamp(2.9rem,8.2vw,7.6rem);line-height:.95;font-weight:800;letter-spacing:-0.045em;max-width:11ch}
+.hero .ar-line{font-size:clamp(1.6rem,3.4vw,2.9rem);color:var(--green);margin-top:18px;line-height:1.4;text-align:left}
+.hero .lede{color:var(--mist);font-size:1.12rem;max-width:42ch;margin:26px 0 0}
+.hud{display:grid;gap:10px;min-width:230px}
+.hud div{border:1px solid var(--line);background:rgba(6,10,24,.55);backdrop-filter:blur(6px);border-radius:14px;padding:12px 16px}
+.hud small{display:block;color:var(--mist);font-size:.78rem}
+.hud b{font-family:var(--disp);font-size:1.6rem;font-weight:600;font-variant-numeric:tabular-nums}
+.hud .warn b{color:var(--flag)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.btn{font-family:var(--disp);font-size:.9rem;font-weight:600;text-decoration:none;padding:14px 22px;border-radius:999px;border:1px solid var(--snow);display:inline-block;cursor:pointer;background:none;color:var(--snow)}
+.btn.fill{background:var(--snow);color:var(--night);border-color:var(--snow)}
+.btn.fill:hover{background:var(--green);border-color:var(--green)}
+.btn:not(.fill):hover{background:rgba(234,242,255,.08)}
 
-/* hero */
-.hero{display:grid;grid-template-columns:6fr 6fr;gap:56px;align-items:center;padding:36px 0 88px}
-.hero h1{margin-bottom:24px}
-.actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
-.btn{display:inline-block;font-family:var(--display);font-weight:600;font-size:1.02rem;text-decoration:none;padding:13px 22px;border-radius:999px;border:2px solid var(--ink)}
-.btn.solid{background:var(--ink);color:#fff}
-.btn.solid:hover{background:#1d3a55;border-color:#1d3a55}
-.btn.ghost:hover{background:#fff}
+/* ---------- sections ---------- */
+section{padding:130px 0;position:relative}
+.kicker{font-family:var(--ar);color:var(--green);font-size:1.5rem;display:block;margin-bottom:14px;direction:rtl;text-align:left}
+.intro{display:grid;grid-template-columns:5fr 6fr;gap:64px;align-items:end;margin-bottom:64px}
+.intro p{color:var(--mist);font-size:1.08rem}
 
-.mirror{background:var(--panel);border-radius:22px;padding:18px;color:#DCE7EE;box-shadow:0 30px 60px -30px rgba(19,41,61,.55)}
-.mirror-top{display:flex;justify-content:space-between;align-items:baseline;padding:4px 8px 10px;font-size:.88rem;color:#8EA5B6}
-.rec{display:inline-flex;align-items:center;gap:8px}
-.rec i{width:8px;height:8px;border-radius:50%;background:var(--flag);display:inline-block}
-.stage{position:relative;border-radius:14px;overflow:hidden;background:
-  radial-gradient(120% 90% at 50% 10%, #183650 0%, #0B1A28 70%)}
-.stage svg{display:block;width:100%;height:auto}
-.readout{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
-.cell{background:#16304A;border-radius:12px;padding:12px 14px}
-.cell small{display:block;color:#8EA5B6;font-size:.8rem;line-height:1.3}
-.cell b{display:block;font-family:var(--display);font-size:1.7rem;line-height:1.15;color:#fff;font-variant-numeric:tabular-nums}
-.cell.flagged b{color:var(--flag)}
-.caption{font-size:.84rem;color:#8EA5B6;margin:12px 6px 2px;max-width:none}
+/* days */
+.toggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:4px;margin-bottom:26px}
+.toggle button{font:600 .85rem var(--disp);background:none;border:0;color:var(--mist);padding:10px 18px;border-radius:999px;cursor:pointer}
+.toggle button[aria-pressed="true"]{background:var(--snow);color:var(--night)}
+.days{display:grid;grid-template-columns:repeat(14,1fr);gap:8px}
+.day{aspect-ratio:3/5;border-radius:12px;border:1px solid var(--line);position:relative;overflow:hidden;background:var(--night2);display:flex;flex-direction:column;justify-content:flex-end;padding:8px}
+.day span{font-size:.72rem;color:var(--mist);position:relative;z-index:2}
+.day .bar{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(to top,rgba(61,245,167,.0),rgba(61,245,167,.55) 60%,rgba(34,211,238,.9));height:0;transition:height .7s cubic-bezier(.2,.8,.2,1)}
+.day .q{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--disp);font-size:1.4rem;color:rgba(159,176,212,.35);transition:opacity .4s}
+.day.clinic{border-color:var(--snow)}
+.day.clinic .q{color:var(--snow);font-size:.62rem;font-family:var(--body);opacity:1}
+.days-note{color:var(--mist);font-size:.9rem;margin-top:16px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:80px}
+.stats b{display:block;font-family:var(--disp);font-size:clamp(3rem,6vw,5.2rem);line-height:1;font-weight:800;letter-spacing:-0.04em;background:linear-gradient(100deg,var(--green),var(--teal) 60%,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stats p{color:var(--mist);font-size:.95rem;margin-top:12px}
 
-/* sections */
-section{padding:92px 0;border-top:1px solid var(--line)}
-.split{display:grid;grid-template-columns:4fr 7fr;gap:56px}
-.split > div:first-child h2{position:sticky;top:28px}
-
-.problem p{font-size:1.15rem}
-.problem strong{font-weight:700}
-
-.measures{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:0}
-.measures li{padding:26px 26px 26px 0;border-top:1px solid var(--line)}
-.measures li:nth-child(odd){padding-right:34px}
-.measures p{color:var(--slate);margin:10px 0 0;font-size:1rem}
-.status{display:inline-block;font-size:.8rem;font-weight:700;padding:3px 10px;border-radius:999px;margin-top:12px}
-.status.built{background:#DCF1E7;color:#1E6E4A}
-.status.review{background:#FBEBD0;color:#8A5A0B}
-
-/* evidence */
-.evidence{display:grid;gap:0}
-.row{display:grid;grid-template-columns:200px 1fr;gap:28px;padding:26px 0;border-top:1px solid var(--line);align-items:start}
-.row .num{font-family:var(--display);font-size:2.6rem;line-height:1;font-weight:600;letter-spacing:-0.03em;font-variant-numeric:tabular-nums}
-.row .num.miss{color:var(--flag)}
-.row h3{margin-bottom:6px}
-.row p{color:var(--slate);margin:0;font-size:1rem}
+/* lab */
+.lab{background:linear-gradient(180deg,var(--night),var(--night2) 30%,var(--night2) 70%,var(--night))}
+.lab-grid{display:grid;grid-template-columns:7fr 5fr;gap:48px;align-items:center}
+.lab-stage{border:1px solid var(--line);border-radius:26px;background:#050816;overflow:hidden}
+.lab-stage svg{display:block;width:100%;height:auto}
+.controls{display:grid;gap:26px}
+.ctl label{display:flex;justify-content:space-between;font-size:.95rem;color:var(--mist);margin-bottom:8px}
+.ctl output{font-family:var(--disp);color:var(--snow);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--green);height:28px}
+.check{display:flex;gap:12px;align-items:center;font-size:.95rem;color:var(--mist);cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--flag)}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.compare div{border:1px solid var(--line);border-radius:16px;padding:16px}
+.compare small{display:block;font-size:.8rem;color:var(--mist);line-height:1.35}
+.compare b{display:block;font-family:var(--disp);font-size:2.2rem;font-weight:600;margin-top:6px;font-variant-numeric:tabular-nums}
+.compare .naive b{color:var(--mist)}
+.compare .ours{border-color:rgba(61,245,167,.5)}
+.compare .ours b{color:var(--green)}
+.verdict{min-height:3.2em;font-size:.95rem;color:var(--snow)}
+.verdict .w{color:var(--flag)}
 
 /* shihab */
-.shihab{background:var(--panel);color:#DCE7EE;border-top:none}
-.shihab h2{color:#fff}
-.shihab p{color:#B5C6D3}
-.shihab .split{align-items:start}
-.shihab figure{margin:0}
-.shihab svg{width:100%;height:auto;display:block;border-radius:18px}
+.shihab-grid{display:grid;grid-template-columns:5fr 7fr;gap:56px;align-items:center}
+#mirror{width:100%;aspect-ratio:4/3;display:block;border-radius:26px;border:1px solid var(--line);background:#040714;cursor:pointer}
+.shihab-word{font-family:var(--ar);font-size:clamp(4rem,9vw,8rem);line-height:1;color:var(--snow);direction:rtl;display:block;text-align:left;margin-bottom:8px;background:linear-gradient(90deg,var(--teal),var(--green),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hint{font-size:.88rem;color:var(--mist);margin-top:12px}
 
-/* flow */
-.flow{list-style:none;margin:0;padding:0;counter-reset:s}
-.flow li{counter-increment:s;display:grid;grid-template-columns:56px 1fr;gap:18px;padding:22px 0;border-top:1px solid var(--line)}
-.flow li::before{content:counter(s);font-family:var(--display);font-weight:600;font-size:1.5rem;width:44px;height:44px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center}
-.flow p{margin:6px 0 0;color:var(--slate);font-size:1rem}
-.flow .later::before{border-style:dashed;color:var(--slate);border-color:var(--slate)}
+/* proof */
+.proof{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid var(--line)}
+.proof > div{padding:36px 36px 36px 0;border-bottom:1px solid var(--line)}
+.proof > div:nth-child(even){padding-left:36px;border-left:1px solid var(--line)}
+.proof b{font-family:var(--disp);font-size:clamp(2.6rem,5vw,4rem);font-weight:800;letter-spacing:-0.04em;display:block;line-height:1;font-variant-numeric:tabular-nums}
+.proof h3{margin:16px 0 8px}
+.proof p{color:var(--mist);font-size:.98rem;margin:0}
+.gauge{margin-top:18px;height:10px;border-radius:5px;background:rgba(234,242,255,.08);position:relative}
+.gauge i{position:absolute;top:-6px;width:2px;height:22px;background:var(--snow)}
+.gauge em{position:absolute;top:0;left:0;height:10px;border-radius:5px}
+.gauge-l{display:flex;justify-content:space-between;font-size:.75rem;color:var(--mist);margin-top:10px}
+.miss b{color:var(--flag)}
+
+/* path */
+.path{position:relative;margin-top:30px}
+.path svg{position:absolute;left:0;right:0;top:0;width:100%;height:118px;pointer-events:none}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative}
+.steps li{padding-top:150px}
+.steps .n{font-family:var(--disp);font-size:.85rem;color:var(--green)}
+.steps h3{margin:8px 0}
+.steps p{color:var(--mist);font-size:.95rem}
+.steps .later .n{color:var(--mist)}
 
 /* founder */
-.founder p{font-size:1.08rem}
-.founder .links{display:flex;flex-wrap:wrap;gap:14px;margin-top:22px}
+.founder{display:grid;grid-template-columns:5fr 7fr;gap:64px;align-items:start}
+.founder .quote{font-family:var(--disp);font-size:clamp(1.5rem,2.6vw,2.2rem);line-height:1.25;font-weight:400;letter-spacing:-0.015em}
+.founder p{color:var(--mist)}
+.ask{margin-top:40px;padding:30px;border-radius:22px;background:linear-gradient(120deg,rgba(61,245,167,.14),rgba(139,92,246,.14));border:1px solid rgba(61,245,167,.35)}
+.ask h3{font-size:1.3rem;margin-bottom:8px}
+.ask p{color:var(--snow);margin:0}
 
-.ask{background:#fff;border:1px solid var(--line);border-radius:20px;padding:36px;margin-top:8px}
-.ask h3{font-size:1.5rem;margin-bottom:10px}
+footer{padding:60px 0 70px;border-top:1px solid var(--line);color:var(--mist);font-size:.88rem}
+footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;text-align:left}
 
-footer{padding:40px 0 60px;border-top:1px solid var(--line);color:var(--slate);font-size:.9rem}
-footer p{max-width:80ch}
-
-@media (max-width:900px){
-  .hero,.split{grid-template-columns:1fr;gap:34px}
-  .split > div:first-child h2{position:static}
-  .measures{grid-template-columns:1fr}
-  .measures li:nth-child(odd){padding-right:0}
-  .row{grid-template-columns:1fr;gap:10px}
+@media (max-width:960px){
+  .hero-copy,.intro,.lab-grid,.shihab-grid,.founder{grid-template-columns:1fr}
+  .hud{grid-template-columns:repeat(3,1fr);min-width:0}
   .top nav{display:none}
-  section{padding:68px 0}
+  .days{grid-template-columns:repeat(7,1fr)}
+  .stats{grid-template-columns:1fr;gap:28px}
+  .proof{grid-template-columns:1fr}
+  .proof > div:nth-child(even){padding-left:0;border-left:0}
+  .steps{grid-template-columns:1fr 1fr}
+  .steps li{padding-top:40px}
+  .path svg{display:none}
+  section{padding:90px 0}
 }
 @media (max-width:520px){
   body{font-size:17px}
-  .readout{grid-template-columns:1fr 1fr}
-  .readout .cell:last-child{grid-column:span 2}
-  .ask{padding:24px}
+  .hud b{font-size:1.2rem}
+  .steps{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
-<div class="wrap">
-  <header class="top">
-    <a class="brand" href="#" aria-label="Aurora Technologies home">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#13293D"/><path d="M9 24 L16 8 L23 24" stroke="#12B5CB" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="8" r="2.6" fill="#F2B33D"/></svg>
-      Aurora Technologies
-    </a>
-    <nav aria-label="Sections">
-      <a href="#measures">What it measures</a>
-      <a href="#evidence">Results</a>
-      <a href="#shihab">Shihab</a>
-      <a href="#founder">Founder</a>
-    </nav>
-  </header>
-
-  <main id="main">
-    <div class="hero">
-      <div>
-        <h1>Home rehab exercises, measured with the camera you already own.</h1>
-        <p class="lede">Axiora, our first product, watches a patient exercise through an ordinary phone or laptop camera. It measures the joint angle, counts each repetition and spots when the body cheats, so the therapist sees what happened at home.</p>
-        <div class="actions">
-          <a class="btn solid" href="mailto:mmmohamedaaashraf@gmail.com?subject=Aurora%20Technologies">Email the founder</a>
-          <a class="btn ghost" href="#evidence">See the results</a>
-        </div>
-      </div>
-
-      <div class="mirror" role="img" aria-label="Animated example: a tracked skeleton raises its arm while the shoulder angle, repetition count and a shoulder-shrug warning update.">
-        <div class="mirror-top">
-          <span class="rec"><i></i>Shoulder abduction, left arm</span>
-          <span>Target 0° to 150°</span>
-        </div>
-        <div class="stage">
-          <svg id="fig" viewBox="0 0 480 390" aria-hidden="true">
-            <defs>
-              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            </defs>
-            <path id="targetArc" fill="none" stroke="#F2B33D" stroke-width="2" stroke-dasharray="3 7" opacity=".75"/>
-            <path id="angleArc" fill="rgba(18,181,203,.16)" stroke="#12B5CB" stroke-width="1.5"/>
-            <line id="trunkAxis" stroke="#F2B33D" stroke-width="1.5" stroke-dasharray="6 6" opacity=".7"/>
-            <g filter="url(#glow)" stroke="#12B5CB" stroke-width="5" stroke-linecap="round" fill="none">
-              <line id="spine"/>
-              <line id="shoulders"/>
-              <line id="hips"/>
-              <line id="rArmU"/><line id="rArmL"/>
-              <line id="lArmU"/><line id="lArmL"/>
-              <line id="rLeg"/><line id="lLeg"/>
-              <line id="neck"/>
-            </g>
-            <circle id="head" r="17" fill="none" stroke="#12B5CB" stroke-width="4" filter="url(#glow)"/>
-            <circle id="lShoulderDot" r="9" fill="none" stroke="#E0457B" stroke-width="3" opacity="0"/>
-            <text id="angleLabel" font-family="Familjen Grotesk, Arial" font-size="20" font-weight="600" fill="#fff"></text>
-          </svg>
-        </div>
-        <div class="readout">
-          <div class="cell"><small>Angle to trunk</small><b id="rAngle">0°</b></div>
-          <div class="cell"><small>Full repetitions</small><b id="rReps">0</b></div>
-          <div class="cell" id="flagCell"><small>Compensation</small><b id="rFlag">None</b></div>
-        </div>
-        <p class="caption">Illustration of the measurement screen. The real system tracks 33 body landmarks from live video.</p>
-      </div>
+<header class="hero">
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="wrap" style="width:100%;flex:1;display:flex;flex-direction:column">
+    <div class="top">
+      <a class="brand" href="#">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0B1230"/><path d="M6 24 C10 10 22 10 26 24" stroke="#3DF5A7" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="16" cy="9" r="2.4" fill="#EAF2FF"/></svg>
+        Aurora Technologies
+      </a>
+      <nav aria-label="Sections">
+        <a href="#unseen">The problem</a>
+        <a href="#lab">How it measures</a>
+        <a href="#shihab">Shihab</a>
+        <a href="#proof">Results</a>
+        <a href="#founder">Founder</a>
+      </nav>
     </div>
 
-    <section class="problem" aria-labelledby="problem-h">
-      <div class="split">
-        <div><h2 id="problem-h">Most rehabilitation happens where no one is watching.</h2></div>
-        <div>
-          <p>A physiotherapist sees a patient for a short session, then sends them home with a sheet of exercises. The real work happens in the living room, without feedback.</p>
-          <p>Patients can't tell how far they actually raise the arm. They lean the trunk or hike the shoulder to make the movement look bigger without noticing, and the therapist only hears "I did them" at the next visit.</p>
-          <p><strong>Axiora gives that home session a record:</strong> the range reached on each repetition, how many were done properly, and which compensations showed up.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="measures" aria-labelledby="measures-h">
-      <div class="split">
-        <div><h2 id="measures-h">What the camera measures</h2></div>
-        <ul class="measures">
-          <li>
-            <h3>Joint angle against the trunk</h3>
-            <p>Shoulder elevation is measured relative to the patient's own trunk, following the International Society of Biomechanics shoulder convention. Leaning sideways does not inflate the number.</p>
-            <span class="status built">Built</span>
-          </li>
-          <li>
-            <h3>Repetitions, counted and graded</h3>
-            <p>Each repetition is marked full, partial, too fast or in the wrong plane. Jitter and half movements are not counted.</p>
-            <span class="status built">Built</span>
-          </li>
-          <li>
-            <h3>Compensation warnings</h3>
-            <p>Shoulder shrug, trunk side-bend, bent elbow and head tilt are flagged as they happen. Thresholds come from published research and the therapist can adjust them per patient.</p>
-            <span class="status built">Built</span>
-          </li>
-          <li>
-            <h3>Paced sessions from a prescription</h3>
-            <p>Raise, hold, lower and rest cues follow the tempo, sets and repetitions the therapist sets. Exercises come from a library built on published clinical guidance.</p>
-            <span class="status review">Awaiting clinical review</span>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <section id="evidence" aria-labelledby="evidence-h">
-      <div class="split">
-        <div>
-          <h2 id="evidence-h">Results so far</h2>
-          <p style="margin-top:18px;color:var(--slate);font-size:1rem">Tested on public research datasets and live sessions. We report the miss along with the wins.</p>
-        </div>
-        <div class="evidence">
-          <div class="row">
-            <div class="num">20 / 20</div>
-            <div><h3>Repetition counting</h3><p>Repetitions counted correctly in all 20 sequences of the UI-PRMD public rehabilitation dataset.</p></div>
-          </div>
-          <div class="row">
-            <div class="num">0</div>
-            <div><h3>False alarms on clean movement</h3><p>In live testing, deliberate compensations were flagged on nearly every repetition, and clean repetitions raised no warnings.</p></div>
-          </div>
-          <div class="row">
-            <div class="num">8.4°</div>
-            <div><h3>Abduction error against motion capture</h3><p>Root-mean-square error for side-raise movements, compared with marker-based motion capture on the REHAB24-6 dataset, using subjects held out from development.</p></div>
-          </div>
-          <div class="row">
-            <div class="num miss">12.9°</div>
-            <div><h3>Overall error, below our own target</h3><p>Across all movements the error was 12.9° against a pre-registered target of 10°. It grows when the arm points toward the camera, where single-camera depth is weakest. That is the next engineering problem.</p></div>
-          </div>
-          <div class="row">
-            <div class="num">580+</div>
-            <div><h3>Automated tests</h3><p>Every change runs the full test suite and replays recorded sessions. A change that alters an earlier result is rejected.</p></div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-</div>
-
-<section id="shihab" class="shihab" aria-labelledby="shihab-h">
-  <div class="wrap">
-    <div class="split">
+    <div class="hero-copy">
       <div>
-        <h2 id="shihab-h">Shihab: the exercise as a game</h2>
+        <h1>Every movement leaves a trace.</h1>
+        <div class="ar-line ar" lang="ar">كل حركة تترك أثرًا</div>
+        <p class="lede">Axiora turns an ordinary phone or laptop camera into a measurement tool for home physiotherapy. The patient exercises; the therapist finally sees what happened.</p>
+        <div class="cta">
+          <a class="btn fill" href="#lab">Try the measurement</a>
+          <a class="btn" href="mailto:mmmohamedaaashraf@gmail.com?subject=Aurora%20Technologies">Email the founder</a>
+        </div>
       </div>
-      <div>
-        <figure>
-          <svg viewBox="0 0 640 300" role="img" aria-label="Sketch of the Shihab mirror screen: the patient's glowing outline, a target path for the arm, and crystals that break on a clean repetition.">
-            <rect width="640" height="300" fill="#0B1A28"/>
-            <g fill="#F2B33D" opacity=".9">
-              <circle cx="80" cy="40" r="1.6"/><circle cx="170" cy="70" r="1.2"/><circle cx="560" cy="50" r="1.8"/><circle cx="600" cy="120" r="1.2"/><circle cx="430" cy="30" r="1.4"/><circle cx="40" cy="160" r="1.2"/>
-            </g>
-            <path d="M320 150 A110 110 0 0 1 430 40" fill="none" stroke="#F2B33D" stroke-width="2" stroke-dasharray="4 8"/>
-            <g stroke="#12B5CB" stroke-width="5" stroke-linecap="round" fill="none" opacity=".95">
-              <circle cx="300" cy="92" r="18"/>
-              <line x1="300" y1="110" x2="300" y2="125"/>
-              <line x1="268" y1="128" x2="332" y2="128"/>
-              <line x1="300" y1="128" x2="300" y2="215"/>
-              <line x1="332" y1="128" x2="398" y2="68"/>
-              <line x1="268" y1="128" x2="250" y2="210"/>
-              <line x1="300" y1="215" x2="282" y2="290"/>
-              <line x1="300" y1="215" x2="318" y2="290"/>
-            </g>
-            <g fill="#12B5CB">
-              <polygon points="430,40 441,30 452,42 440,54"/>
-              <polygon points="458,22 465,14 472,24 464,30" opacity=".7"/>
-              <polygon points="448,62 454,58 458,66 451,70" opacity=".6"/>
-              <polygon points="416,20 421,15 426,22 420,26" opacity=".5"/>
-            </g>
-            <text x="24" y="262" font-family="Familjen Grotesk, Arial" font-size="17" fill="#DCE7EE">Clean rep: the crystal breaks</text>
-            <text x="24" y="284" font-family="Familjen Grotesk, Arial" font-size="14" fill="#8EA5B6">Shrug: the shoulder glows red</text>
-          </svg>
-        </figure>
-        <p style="margin-top:26px">Home exercise is boring, and people stop doing it. Shihab shows the patient their own body as a glowing outline on screen, with a path for where the arm should go. A clean repetition shatters a crystal.</p>
-        <p>When the body compensates, the game doesn't take points away. The part of the body that is cheating lights up instead, which tells the patient what to fix. We chose this because research on rehabilitation games found that point penalties do little to reduce compensation.</p>
-        <p>Instructions are written in Arabic first.</p>
+      <div class="hud" aria-live="off" aria-label="Live readout from the animated figure">
+        <div><small>Shoulder angle to trunk</small><b id="hAngle">0°</b></div>
+        <div><small>Clean repetitions</small><b id="hReps">0</b></div>
+        <div id="hFlagBox"><small>Compensation</small><b id="hFlag">None</b></div>
       </div>
     </div>
   </div>
-</section>
+</header>
 
-<div class="wrap">
-  <section aria-labelledby="flow-h">
-    <div class="split">
-      <div><h2 id="flow-h">How a session works</h2></div>
-      <ol class="flow">
-        <li><div><h3>The therapist prescribes</h3><p>Exercises, target range, tempo and sets, chosen from the library and adjusted to the patient.</p></div></li>
-        <li><div><h3>The patient sets up the camera</h3><p>A setup check makes sure the whole body is in frame and the camera angle is usable before the session starts.</p></div></li>
-        <li><div><h3>The patient exercises at home</h3><p>Live measurement, repetition grading and compensation warnings, inside the Shihab game or as a plain guided session.</p></div></li>
-        <li class="later"><div><h3>The therapist reviews progress</h3><p>Range reached, repetitions completed and compensations per session. This dashboard is the next thing we are building.</p></div></li>
-      </ol>
+<main id="main">
+
+  <section id="unseen">
+    <div class="wrap">
+      <div class="intro">
+        <div>
+          <span class="kicker" lang="ar">الساعات الغائبة</span>
+          <h2>Twelve of fourteen days happen in the dark.</h2>
+        </div>
+        <p>A patient sees the therapist, then goes home with an exercise sheet. Until the next visit, nobody knows how far the arm went, how many reps were real, or whether the trunk did the work. Switch the view to see what Axiora adds.</p>
+      </div>
+
+      <div class="toggle" role="group" aria-label="Compare two weeks">
+        <button type="button" id="tWithout" aria-pressed="true">Today</button>
+        <button type="button" id="tWith" aria-pressed="false">With Axiora</button>
+      </div>
+      <div class="days" id="days"></div>
+      <p class="days-note">Illustration of a two-week shoulder programme. Bars show the range reached on each home session.</p>
+
+      <div class="stats">
+        <div><b>50%</b><p>Estimated non-adherence to home exercise in rehabilitation. Argent et al., JMIR mHealth, 2018.</p></div>
+        <div><b>70%</b><p>Upper estimate of non-adherence; adherent patients left with better function. Himler et al., 2023.</p></div>
+        <div><b>59%</b><p>Of physiotherapy patients surveyed in Jordan said they did not stick to home exercises. Almalty et al.</p></div>
+      </div>
     </div>
   </section>
 
-  <section id="founder" class="founder" aria-labelledby="founder-h">
-    <div class="split">
-      <div><h2 id="founder-h">Who is building it</h2></div>
-      <div>
-        <h3 style="font-size:1.5rem">Mohamed Ashraf, founder</h3>
-        <p style="margin-top:12px">I'm a petroleum engineer working in Abu Dhabi, and I build robotics and AI systems: robot simulation in ROS 2, computer vision, and an earlier mixed-reality rehabilitation prototype for Meta Quest 3. I'm completing an MSc at Al-Azhar University on AI for drilling operations.</p>
-        <p>Axiora came out of that rehabilitation work. Measuring human movement is a robotics problem, and the camera in every patient's pocket is good enough to start with.</p>
-        <div class="links">
-          <a class="btn solid" href="https://www.linkedin.com/in/mohamed-ashraf0" rel="noopener">LinkedIn profile</a>
-          <a class="btn ghost" href="mailto:mmmohamedaaashraf@gmail.com?subject=Aurora%20Technologies">mmmohamedaaashraf@gmail.com</a>
+  <section id="lab" class="lab">
+    <div class="wrap">
+      <div class="intro">
+        <div>
+          <span class="kicker" lang="ar">لا يمكن خداعه</span>
+          <h2>Try to cheat the camera.</h2>
         </div>
-
-        <div class="ask" style="margin-top:44px">
-          <h3>Physiotherapists: help us validate it</h3>
-          <p style="margin:0">The next step is a clinical review of the exercise library and a comparison against manual goniometry. If you treat shoulder patients and want to take part, please get in touch.</p>
+        <p>A simple pose tracker measures the arm against the edge of the picture, so leaning sideways makes the arm look higher. Axiora measures against the patient's own trunk, the way the International Society of Biomechanics defines it, and names the compensation.</p>
+      </div>
+      <div class="lab-grid">
+        <div class="lab-stage">
+          <svg id="labSvg" viewBox="0 0 600 460" role="img" aria-label="Figure whose arm angle, trunk lean and shoulder shrug follow the controls">
+            <defs>
+              <radialGradient id="lg" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#0E1A44"/><stop offset="1" stop-color="#050816"/></radialGradient>
+              <filter id="gl"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <rect width="600" height="460" fill="url(#lg)"/>
+            <line x1="0" y1="430" x2="600" y2="430" stroke="rgba(234,242,255,.1)"/>
+            <line id="imgV" stroke="#9FB0D4" stroke-width="1.5" stroke-dasharray="4 6"/>
+            <line id="trkV" stroke="#3DF5A7" stroke-width="1.5" stroke-dasharray="7 6"/>
+            <path id="arcN" fill="none" stroke="#9FB0D4" stroke-width="2"/>
+            <path id="arcO" fill="rgba(61,245,167,.15)" stroke="#3DF5A7" stroke-width="2"/>
+            <g id="body" filter="url(#gl)" stroke="#22D3EE" stroke-width="6" stroke-linecap="round" fill="none"></g>
+            <circle id="shDot" r="13" fill="none" stroke="#FF5C9A" stroke-width="3" opacity="0"/>
+            <circle id="trDot" r="13" fill="none" stroke="#FF5C9A" stroke-width="3" opacity="0"/>
+          </svg>
+        </div>
+        <div class="controls">
+          <div class="ctl"><label for="cArm">Arm raised <output id="oArm">90°</output></label><input id="cArm" type="range" min="0" max="160" value="90"></div>
+          <div class="ctl"><label for="cLean">Trunk lean to the side <output id="oLean">0°</output></label><input id="cLean" type="range" min="0" max="25" value="0"></div>
+          <label class="check"><input id="cShrug" type="checkbox"> Hike the shoulder</label>
+          <div class="compare">
+            <div class="naive"><small>Simple tracker, against the picture edge</small><b id="vNaive">90°</b></div>
+            <div class="ours"><small>Axiora, against the patient's trunk</small><b id="vOurs">90°</b></div>
+          </div>
+          <p class="verdict" id="verdict" aria-live="polite">Clean movement. Both agree.</p>
         </div>
       </div>
     </div>
   </section>
-</div>
+
+  <section id="shihab">
+    <div class="wrap">
+      <div class="shihab-grid">
+        <div>
+          <span class="shihab-word" lang="ar">شِهاب</span>
+          <h2 style="font-size:clamp(1.6rem,3vw,2.4rem)">The exercise becomes a meteor shower.</h2>
+          <p style="color:var(--mist);margin-top:22px">Shihab shows patients their own body as light, with a path for where the arm should go. A clean repetition shatters a crystal into sparks.</p>
+          <p style="color:var(--mist)">A compensation doesn't cost points. The part of the body doing the cheating glows red, so the patient knows what to fix. We chose this because research on rehab games found that point penalties do little to reduce compensation.</p>
+          <p style="color:var(--mist)">Instructions are written in Arabic first.</p>
+        </div>
+        <div>
+          <canvas id="mirror" aria-label="Shihab demo: click to perform a repetition and break the crystal" role="img"></canvas>
+          <p class="hint">Click or tap the mirror to do a repetition. Every third one, the figure shrugs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="proof" class="lab">
+    <div class="wrap">
+      <div class="intro">
+        <div>
+          <span class="kicker" lang="ar">الأرقام كما هي</span>
+          <h2>Results, including the miss.</h2>
+        </div>
+        <p>Tested on public rehabilitation datasets with motion-capture ground truth and in live sessions. We set the accuracy target before running the test, and we publish the result either way.</p>
+      </div>
+      <div class="proof">
+        <div><b>20/20</b><h3>Repetitions counted correctly</h3><p>Every sequence of the public UI-PRMD rehabilitation dataset.</p></div>
+        <div><b>0</b><h3>False alarms on clean movement</h3><p>In live testing; deliberate compensations were flagged on nearly every repetition.</p></div>
+        <div>
+          <b>8.4°</b><h3>Side-raise error vs motion capture</h3><p>RMSE on REHAB24-6, on subjects held out from development.</p>
+          <div class="gauge" aria-hidden="true"><em style="width:42%;background:var(--green)"></em><i style="left:50%"></i></div>
+          <div class="gauge-l"><span>0°</span><span>target 10°</span><span>20°</span></div>
+        </div>
+        <div class="miss">
+          <b>12.9°</b><h3>Overall error: target not met</h3><p>Grows when the arm points at the camera, where one camera sees depth worst. That is the next engineering problem.</p>
+          <div class="gauge" aria-hidden="true"><em style="width:64.5%;background:var(--flag)"></em><i style="left:50%"></i></div>
+          <div class="gauge-l"><span>0°</span><span>target 10°</span><span>20°</span></div>
+        </div>
+        <div><b>580+</b><h3>Automated tests</h3><p>Recorded sessions replay on every change. A change that alters an earlier result is rejected.</p></div>
+        <div><b>0</b><h3>Extra hardware</h3><p>No sensors or depth camera. It runs live on an ordinary laptop webcam.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="intro">
+        <div>
+          <span class="kicker" lang="ar">رحلة الجلسة</span>
+          <h2>One session, start to finish.</h2>
+        </div>
+        <p>The first three steps run today. The therapist dashboard is what we build next.</p>
+      </div>
+      <div class="path">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+          <defs><linearGradient id="pg" x1="0" x2="1"><stop offset="0" stop-color="#3DF5A7"/><stop offset=".7" stop-color="#22D3EE"/><stop offset="1" stop-color="#8B5CF6" stop-opacity=".25"/></linearGradient></defs>
+          <path d="M10 90 C 200 10, 320 110, 450 60 S 760 10, 900 60 S 1120 100, 1190 40" fill="none" stroke="url(#pg)" stroke-width="3"/>
+          <circle cx="10" cy="90" r="7" fill="#3DF5A7"/><circle cx="310" cy="72" r="7" fill="#3DF5A7"/><circle cx="610" cy="27" r="7" fill="#22D3EE"/><circle cx="905" cy="62" r="7" fill="none" stroke="#8B5CF6" stroke-width="2"/>
+        </svg>
+        <ol class="steps">
+          <li><span class="n">01 Today</span><h3>The therapist prescribes</h3><p>Exercises, target range, tempo and sets, from a library built on published clinical guidance.</p></li>
+          <li><span class="n">02 Today</span><h3>The camera checks the setup</h3><p>Whole body in frame, usable angle, before the session starts.</p></li>
+          <li><span class="n">03 Today</span><h3>The patient exercises</h3><p>Live angle, graded repetitions and compensation warnings, inside Shihab.</p></li>
+          <li class="later"><span class="n">04 Next</span><h3>The therapist reviews</h3><p>Range, repetitions and compensations per session on a dashboard.</p></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="founder">
+    <div class="wrap">
+      <div class="founder">
+        <div>
+          <span class="kicker" lang="ar">من يبنيه</span>
+          <p class="quote">Measuring human movement is a robotics problem. The camera in every patient's pocket is good enough to start.</p>
+        </div>
+        <div>
+          <h3 style="font-size:1.4rem">Mohamed Ashraf, founder</h3>
+          <p style="margin-top:12px">A petroleum engineer in Abu Dhabi who builds robotics and AI systems: computer vision, ROS 2 robot simulation and reinforcement learning. Axiora grew out of an earlier mixed-reality shoulder rehab prototype for Meta Quest 3. He is completing an MSc at Al-Azhar University on AI for drilling operations.</p>
+          <div class="cta">
+            <a class="btn fill" href="https://www.linkedin.com/in/mohamed-ashraf0" rel="noopener">LinkedIn</a>
+            <a class="btn" href="mailto:mmmohamedaaashraf@gmail.com?subject=Aurora%20Technologies">mmmohamedaaashraf@gmail.com</a>
+          </div>
+          <div class="ask">
+            <h3>Physiotherapists, we need you</h3>
+            <p>We are looking for a physiotherapist to join as clinical co-founder or lead advisor, and for clinics in Abu Dhabi to run the first pilot with shoulder patients.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 
 <footer>
   <div class="wrap">
+    <span class="ar" lang="ar">أورورا للتقنيات · أبوظبي</span>
     <p>Axiora is an early-stage research prototype. It is not a medical device and does not diagnose or treat any condition. Exercise programmes should be set and supervised by a licensed physiotherapist.</p>
-    <p>Abu Dhabi, United Arab Emirates. © 2026 Aurora Technologies.</p>
+    <p>© 2026 Aurora Technologies, Abu Dhabi.</p>
   </div>
 </footer>
 
 <script>
 (function(){
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var $ = function(id){return document.getElementById(id)};
-  function L(id,x1,y1,x2,y2){var e=$(id);e.setAttribute('x1',x1);e.setAttribute('y1',y1);e.setAttribute('x2',x2);e.setAttribute('y2',y2)}
-  var UA=78, LA=70, TARGET=150;
-  var reps=0, wasHigh=false, cycle=0, flagged=false;
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = id => document.getElementById(id);
+const rad = d => d*Math.PI/180;
 
-  function pt(cx,cy,len,deg,dir){ // deg from trunk-down axis, dir=+1 to the right side of screen
-    var r=deg*Math.PI/180; return [cx+dir*len*Math.sin(r), cy+len*Math.cos(r)];
-  }
-  function arcPath(cx,cy,rad,a0,a1,dir){
-    var p0=pt(cx,cy,rad,a0,dir), p1=pt(cx,cy,rad,a1,dir);
-    var large=(a1-a0)>180?1:0; var sweep=dir>0?0:1;
-    return 'M'+p0[0].toFixed(1)+' '+p0[1].toFixed(1)+' A'+rad+' '+rad+' 0 '+large+' '+sweep+' '+p1[0].toFixed(1)+' '+p1[1].toFixed(1);
-  }
+/* ================= HERO: aurora drawn by the moving arm ================= */
+const sky = $('sky'), sx = sky.getContext('2d');
+let W, H, DPR, stars = [];
+function size(){
+  DPR = Math.min(devicePixelRatio||1, 2);
+  W = sky.clientWidth; H = sky.clientHeight;
+  sky.width = W*DPR; sky.height = H*DPR; sx.setTransform(DPR,0,0,DPR,0,0);
+  stars = Array.from({length: Math.round(W*H/5200)}, () => ({x:Math.random()*W, y:Math.random()*H*0.8, r:Math.random()*1.2+0.2, t:Math.random()*6}));
+  trail.length = 0;
+}
+const trail = [];
+let reps = 0, high = false;
+const hues = [[61,245,167],[34,211,238],[139,92,246]];
 
-  function draw(angle, shrug){
-    var cx=210, hipY=272, shY=170 - shrug*10;
-    var lsx=cx+34, rsx=cx-34;
-    L('spine',cx,shY+2,cx,hipY);
-    L('shoulders',rsx,shY+2,lsx,shY - shrug*4);
-    L('hips',cx-22,hipY,cx+22,hipY);
-    L('neck',cx,shY+2,cx,shY-14);
-    var h=$('head'); h.setAttribute('cx',cx); h.setAttribute('cy',shY-32);
-    // right arm resting
-    L('rArmU',rsx,shY+2,rsx-8,shY+76); L('rArmL',rsx-8,shY+76,rsx-12,shY+146);
-    // left arm (screen right) raised by angle
-    var sY=shY-shrug*4;
-    var e=pt(lsx,sY,UA,angle,1), w=pt(e[0],e[1],LA,angle+(shrug?0:4),1);
-    L('lArmU',lsx,sY,e[0],e[1]); L('lArmL',e[0],e[1],w[0],w[1]);
-    L('rLeg',cx-18,hipY,cx-26,hipY+96); L('lLeg',cx+18,hipY,cx+26,hipY+96);
-    // trunk axis reference
-    L('trunkAxis',lsx,sY,lsx,sY+110);
-    $('angleArc').setAttribute('d', arcPath(lsx,sY,46,0,Math.max(angle,0.1),1)+' L'+lsx+' '+sY+' Z');
-    $('targetArc').setAttribute('d', arcPath(lsx,sY,UA+LA+4,0,TARGET,1));
-    var lbl=pt(lsx,sY,64,angle/2,1), t=$('angleLabel');
-    t.setAttribute('x',lbl[0]+6); t.setAttribute('y',lbl[1]+6); t.textContent=Math.round(angle)+'°';
-    var d=$('lShoulderDot'); d.setAttribute('cx',lsx); d.setAttribute('cy',sY); d.setAttribute('opacity',shrug?1:0);
-    $('rAngle').textContent=Math.round(angle)+'°';
-  }
+function figure(t){
+  const scale = Math.min(H/900, W/1300) * 1.1;
+  const cx = W*(W<960?0.72:0.64), hip = H*0.80;
+  const cyc = (t/4800)%1, n = Math.floor(t/4800);
+  const shrugRep = n%3 === 2;
+  const peak = shrugRep ? 115 : 150;
+  let a;
+  if (cyc < .42) a = peak*(.5-.5*Math.cos(Math.PI*cyc/.42));
+  else if (cyc < .55) a = peak;
+  else if (cyc < .92) a = peak*(.5+.5*Math.cos(Math.PI*(cyc-.55)/.37));
+  else a = 0;
+  const shrug = shrugRep && a > 70 ? Math.min(1,(a-70)/35) : 0;
+  const s = v => v*scale;
+  const sh = hip - s(230), lsx = cx + s(48), rsx = cx - s(48), lsy = sh - s(14)*shrug;
+  const P = {};
+  P.hip=[cx,hip]; P.neck=[cx,sh]; P.head=[cx,sh-s(52)];
+  P.ls=[lsx,lsy]; P.rs=[rsx,sh];
+  P.le=[lsx+s(110)*Math.sin(rad(a)), lsy+s(110)*Math.cos(rad(a))];
+  P.lw=[P.le[0]+s(100)*Math.sin(rad(a+4)), P.le[1]+s(100)*Math.cos(rad(a+4))];
+  P.re=[rsx-s(10), sh+s(110)]; P.rw=[rsx-s(16), sh+s(210)];
+  P.lh=[cx+s(30),hip]; P.rh=[cx-s(30),hip];
+  P.lk=[cx+s(38),hip+s(120)]; P.rk=[cx-s(38),hip+s(120)];
+  P.la=[cx+s(42),hip+s(235)]; P.ra=[cx-s(42),hip+s(235)];
+  return {P,a,shrug,scale};
+}
+const bones=[['head','neck'],['neck','ls'],['neck','rs'],['ls','le'],['le','lw'],['rs','re'],['re','rw'],['neck','hip'],['hip','lh'],['hip','rh'],['lh','lk'],['rh','rk'],['lk','la'],['rk','ra']];
 
-  if(reduce){ draw(92,0); $('rReps').textContent='4'; return; }
-
-  var start=null, PERIOD=4200;
-  function frame(ts){
-    if(!start) start=ts;
-    var t=((ts-start)%PERIOD)/PERIOD;
-    var n=Math.floor((ts-start)/PERIOD);
-    var shrugRep=(n%3===2);
-    var peak=shrugRep?118:148;
-    // raise 0-0.4, hold to 0.55, lower to 0.9, rest
-    var a;
-    if(t<0.4) a=peak*(0.5-0.5*Math.cos(Math.PI*t/0.4));
-    else if(t<0.55) a=peak;
-    else if(t<0.9) a=peak*(0.5+0.5*Math.cos(Math.PI*(t-0.55)/0.35));
-    else a=0;
-    var shrug = shrugRep && a>70 ? Math.min(1,(a-70)/30) : 0;
-    draw(a, shrug);
-    if(a>140 && !wasHigh){wasHigh=true; reps++; $('rReps').textContent=reps;}
-    if(a<20) wasHigh=false;
-    var cell=$('flagCell');
-    if(shrug>0.3){$('rFlag').textContent='Shrug'; cell.classList.add('flagged');}
-    else if(!shrugRep || a<20){$('rFlag').textContent='None'; cell.classList.remove('flagged');}
-    requestAnimationFrame(frame);
+function ambient(t){
+  // slow ribbons of light across the upper sky
+  sx.globalCompositeOperation='lighter';
+  const bands=[{y:.22,amp:.07,sp:7000,c:hues[0],len:.28},{y:.30,amp:.05,sp:9500,c:hues[2],len:.22},{y:.16,amp:.04,sp:12000,c:hues[1],len:.18}];
+  for(const b of bands){
+    for(let x=0;x<=W;x+=7){
+      const y = H*(b.y + b.amp*Math.sin(x/(W*0.23) + t/b.sp) + 0.02*Math.sin(x/53 + t/1700));
+      const len = H*b.len*(0.55+0.45*Math.sin(x/97 + t/2300)**2);
+      const g = sx.createLinearGradient(x,y,x,y-len);
+      g.addColorStop(0,`rgba(${b.c[0]},${b.c[1]},${b.c[2]},0)`);
+      g.addColorStop(0.12,`rgba(${b.c[0]},${b.c[1]},${b.c[2]},0.020)`);
+      g.addColorStop(0.5,`rgba(${b.c[0]},${b.c[1]},${b.c[2]},0.008)`);
+      g.addColorStop(1,`rgba(${b.c[0]},${b.c[1]},${b.c[2]},0)`);
+      sx.fillStyle=g; sx.fillRect(x,y-len,8,len);
+    }
   }
-  requestAnimationFrame(frame);
+  sx.globalCompositeOperation='source-over';
+}
+function drawSky(t){
+  // fade previous frame -> long-exposure feel
+  sx.fillStyle = 'rgba(6,10,24,0.16)';
+  sx.fillRect(0,0,W,H);
+  for (const st of stars){
+    const tw = .45+.55*Math.sin(t/900+st.t);
+    sx.fillStyle = `rgba(234,242,255,${.25+.45*tw})`;
+    sx.fillRect(st.x, st.y, st.r, st.r);
+  }
+  const {P,a,shrug,scale} = figure(t);
+  // aurora curtains from wrist trail
+  trail.push({x:P.lw[0], y:P.lw[1], t});
+  while (trail.length && t - trail[0].t > 2600) trail.shift();
+  sx.globalCompositeOperation = 'lighter';
+  ambient(t);
+  for (let i=0;i<trail.length;i+=2){
+    const p = trail[i], age = (t-p.t)/2600, life = 1-age;
+    const c = hues[Math.floor((p.x/W)*3)%3] || hues[0];
+    const len = (120 + 260*Math.sin(i*0.21+t/1400)**2) * scale*1.4;
+    const drift = age*40;
+    const g = sx.createLinearGradient(p.x, p.y-drift, p.x, p.y-drift-len);
+    g.addColorStop(0, `rgba(${c[0]},${c[1]},${c[2]},0)`);
+    g.addColorStop(.08, `rgba(${c[0]},${c[1]},${c[2]},${0.10*life})`);
+    g.addColorStop(.35, `rgba(${c[0]},${c[1]},${c[2]},${0.05*life})`);
+    g.addColorStop(1, `rgba(${c[0]},${c[1]},${c[2]},0)`);
+    sx.strokeStyle = g; sx.lineWidth = 7*scale+2;
+    sx.beginPath(); sx.moveTo(p.x, p.y-drift); sx.lineTo(p.x+Math.sin(i*.3)*6, p.y-drift-len); sx.stroke();
+  }
+  sx.globalCompositeOperation = 'source-over';
+  // skeleton
+  sx.lineCap='round';
+  sx.shadowColor = 'rgba(34,211,238,.9)'; sx.shadowBlur = 18;
+  sx.strokeStyle = 'rgba(234,242,255,.92)'; sx.lineWidth = Math.max(2, 4*scale);
+  sx.beginPath();
+  for (const [a1,b1] of bones){ sx.moveTo(...P[a1]); sx.lineTo(...P[b1]); }
+  sx.stroke();
+  sx.beginPath(); sx.arc(P.head[0],P.head[1],26*scale,0,Math.PI*2); sx.stroke();
+  sx.shadowBlur = 0;
+  for (const k in P){ if(k==='head') continue; sx.fillStyle='#3DF5A7'; sx.beginPath(); sx.arc(P[k][0],P[k][1],Math.max(2.5,4.5*scale),0,Math.PI*2); sx.fill(); }
+  if (shrug > .3){ sx.strokeStyle='rgba(255,92,154,.95)'; sx.lineWidth=3; sx.beginPath(); sx.arc(P.ls[0],P.ls[1],22*scale+6,0,Math.PI*2); sx.stroke(); }
+  // HUD
+  $('hAngle').textContent = Math.round(a)+'°';
+  if (a > 140 && !high){ high = true; reps++; $('hReps').textContent = reps; }
+  if (a < 20) high = false;
+  const box = $('hFlagBox');
+  if (shrug > .3){ $('hFlag').textContent = 'Shrug'; box.classList.add('warn'); }
+  else if (a < 20){ $('hFlag').textContent = 'None'; box.classList.remove('warn'); }
+}
+size(); addEventListener('resize', size);
+if (reduce){ sx.fillStyle='#060A18'; sx.fillRect(0,0,W,H); for(let k=0;k<60;k++) drawSky(1200+k*16); $('hReps').textContent='3'; }
+else { let visible = true; new IntersectionObserver(e=>visible=e[0].isIntersecting).observe(sky);
+  const loop = t => { if (visible) drawSky(t); requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
+
+/* ================= 14 days ================= */
+const daysEl = $('days');
+const ranges = [0,92,105,0,118,124,0,131,138,142,0,146,150,0]; // illustrative
+for (let i=0;i<14;i++){
+  const d = document.createElement('div');
+  const clinic = i===0 || i===13;
+  d.className = 'day' + (clinic ? ' clinic' : '');
+  d.innerHTML = `<div class="bar"></div><div class="q">${clinic ? 'Clinic visit' : '?'}</div><span>Day ${i+1}</span>`;
+  d.dataset.r = ranges[i]; daysEl.appendChild(d);
+}
+function setDays(withA){
+  $('tWith').setAttribute('aria-pressed', withA); $('tWithout').setAttribute('aria-pressed', !withA);
+  [...daysEl.children].forEach((d,i) => {
+    const r = +d.dataset.r, clinic = d.classList.contains('clinic');
+    const bar = d.querySelector('.bar'), q = d.querySelector('.q');
+    if (clinic){ bar.style.height = withA ? '0' : '0'; return; }
+    bar.style.transitionDelay = withA ? (i*45)+'ms' : '0ms';
+    bar.style.height = withA && r ? (r/160*100)+'%' : '0';
+    q.style.opacity = withA ? (r ? 0 : 1) : 1;
+    q.textContent = withA && !r ? 'Rest' : '?';
+    q.style.fontSize = withA && !r ? '.62rem' : '';
+  });
+}
+$('tWith').onclick = () => setDays(true); $('tWithout').onclick = () => setDays(false);
+
+/* ================= Lab: try to cheat ================= */
+const NS='http://www.w3.org/2000/svg';
+const body = $('body');
+function L(x1,y1,x2,y2){ const l=document.createElementNS(NS,'line'); l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2); body.appendChild(l); }
+function C(x,y,r){ const c=document.createElementNS(NS,'circle'); c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',r); body.appendChild(c); }
+function arc(cx,cy,r,from,to){ // angles measured from "down", clockwise toward screen right
+  const p=a=>[cx+r*Math.sin(rad(a)), cy+r*Math.cos(rad(a))];
+  const [x0,y0]=p(from),[x1,y1]=p(to); const large=Math.abs(to-from)>180?1:0; const sweep=to>from?0:1;
+  return `M${x0.toFixed(1)} ${y0.toFixed(1)} A${r} ${r} 0 ${large} ${sweep} ${x1.toFixed(1)} ${y1.toFixed(1)}`;
+}
+function lab(){
+  const arm=+$('cArm').value, lean=+$('cLean').value, shrug=$('cShrug').checked;
+  $('oArm').textContent=arm+'°'; $('oLean').textContent=lean+'°';
+  body.innerHTML='';
+  const hip=[280,400], L1=150;
+  // trunk tilts toward the right (away from raised arm side makes arm look higher)
+  const tdir=[Math.sin(rad(-lean)), -Math.cos(rad(-lean))]; // up along trunk
+  const neck=[hip[0]+tdir[0]*L1, hip[1]+tdir[1]*L1];
+  const perp=[-tdir[1], tdir[0]]; // to the right of trunk
+  const sw=44, up=shrug?14:0;
+  const ls=[neck[0]-perp[0]*sw*-1 + tdir[0]*up, neck[1]-perp[1]*sw*-1 + tdir[1]*up];
+  const rs=[neck[0]-perp[0]*sw, neck[1]-perp[1]*sw];
+  const head=[neck[0]+tdir[0]*44, neck[1]+tdir[1]*44];
+  // arm angle relative to trunk-down direction, rotating outward (to the right)
+  const down=[-tdir[0],-tdir[1]];
+  const rot=(v,deg)=>{const c=Math.cos(rad(-deg)),s=Math.sin(rad(-deg));return [v[0]*c-v[1]*s, v[0]*s+v[1]*c];};
+  const armDir=rot(down,arm);
+  const el=[ls[0]+armDir[0]*95, ls[1]+armDir[1]*95], wr=[el[0]+armDir[0]*85, el[1]+armDir[1]*85];
+  L(...hip,...neck); L(...ls,...rs); C(...head,24);
+  L(...ls,...el); L(...el,...wr);
+  const rdir=rot(down,-8); L(...rs, rs[0]+rdir[0]*95, rs[1]+rdir[1]*95); L(rs[0]+rdir[0]*95, rs[1]+rdir[1]*95, rs[0]+rdir[0]*180, rs[1]+rdir[1]*180);
+  L(hip[0]-24,hip[1],hip[0]+24,hip[1]); L(hip[0]-24,hip[1],hip[0]-30,hip[1]+30); L(hip[0]+24,hip[1],hip[0]+30,hip[1]+30);
+  // reference axes at shoulder
+  const iv=$('imgV'), tv=$('trkV');
+  iv.setAttribute('x1',ls[0]);iv.setAttribute('y1',ls[1]);iv.setAttribute('x2',ls[0]);iv.setAttribute('y2',ls[1]+120);
+  tv.setAttribute('x1',ls[0]);tv.setAttribute('y1',ls[1]);tv.setAttribute('x2',ls[0]+down[0]*120);tv.setAttribute('y2',ls[1]+down[1]*120);
+  const naive = Math.round(arm + lean);
+  $('arcN').setAttribute('d', arc(ls[0],ls[1],70,0,naive));
+  $('arcO').setAttribute('d', arc(ls[0],ls[1],48,lean,lean+arm)+` L${ls[0]} ${ls[1]} Z`);
+  $('vNaive').textContent = naive+'°'; $('vOurs').textContent = arm+'°';
+  const sd=$('shDot'); sd.setAttribute('cx',ls[0]); sd.setAttribute('cy',ls[1]); sd.setAttribute('opacity', shrug?1:0);
+  const td=$('trDot'); td.setAttribute('cx',hip[0]+tdir[0]*80); td.setAttribute('cy',hip[1]+tdir[1]*80); td.setAttribute('opacity', lean>=8?1:0);
+  const msgs=[];
+  if (lean>=8) msgs.push('trunk side-bend');
+  if (shrug) msgs.push('shoulder shrug');
+  $('verdict').innerHTML = msgs.length
+    ? `<span class="w">Compensation: ${msgs.join(' and ')}.</span> The simple tracker reports ${naive}°; the real shoulder movement is ${arm}°.`
+    : (lean>0 ? `Small lean. Axiora still reports the true ${arm}°.` : 'Clean movement. Both agree.');
+}
+['cArm','cLean','cShrug'].forEach(id=>$(id).addEventListener('input',lab)); lab();
+
+/* ================= Shihab mirror ================= */
+const mc=$('mirror'), mx=mc.getContext('2d');
+let MW,MH, sparks=[], rep=0, anim=null, crystal=true;
+function msize(){ const d=Math.min(devicePixelRatio||1,2); MW=mc.clientWidth; MH=mc.clientHeight; mc.width=MW*d; mc.height=MH*d; mx.setTransform(d,0,0,d,0,0); }
+msize(); addEventListener('resize', msize);
+const mstars = Array.from({length:70},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.4+.3}));
+function mirrorFrame(t){
+  mx.fillStyle='rgba(4,7,20,0.35)'; mx.fillRect(0,0,MW,MH);
+  for(const s of mstars){ mx.fillStyle='rgba(234,242,255,.5)'; mx.fillRect(s.x*MW,s.y*MH,s.r,s.r); }
+  const k=MH/540, cx=MW*0.40, hip=MH*0.78, sh=hip-180*k;
+  let a=0, shrug=0;
+  if (anim){ const p=Math.min(1,(t-anim.t0)/1600); a = anim.peak*Math.sin(Math.PI*p); shrug = anim.shrug && a>60 ? 1:0; if(p>=1) anim=null; }
+  const lsx=cx+40*k, lsy=sh-(shrug?12*k:0);
+  const tx=lsx+190*k*Math.sin(rad(150)), ty=lsy+190*k*Math.cos(rad(150));
+  // target path
+  mx.setLineDash([4,8]); mx.strokeStyle='rgba(242,179,61,.75)'; mx.lineWidth=2; mx.beginPath();
+  for(let d=0; d<=150; d+=3){ const x=lsx+190*k*Math.sin(rad(d)), y=lsy+190*k*Math.cos(rad(d)); d?mx.lineTo(x,y):mx.moveTo(x,y); } mx.stroke(); mx.setLineDash([]);
+  // crystal
+  if (crystal){
+    const pulse=1+.08*Math.sin(t/300); mx.save(); mx.translate(tx,ty); mx.rotate(t/900); mx.scale(pulse,pulse);
+    const g=mx.createLinearGradient(-16,-16,16,16); g.addColorStop(0,'#22D3EE'); g.addColorStop(1,'#8B5CF6');
+    mx.fillStyle=g; mx.shadowColor='#22D3EE'; mx.shadowBlur=24; mx.beginPath(); mx.moveTo(0,-20*k); mx.lineTo(13*k,0); mx.lineTo(0,20*k); mx.lineTo(-13*k,0); mx.closePath(); mx.fill(); mx.restore(); mx.shadowBlur=0;
+  }
+  // body as light
+  const ex=lsx+100*k*Math.sin(rad(a)), ey=lsy+100*k*Math.cos(rad(a)), wx=ex+92*k*Math.sin(rad(a)), wy=ey+92*k*Math.cos(rad(a));
+  mx.lineCap='round'; mx.shadowColor='#22D3EE'; mx.shadowBlur=22; mx.strokeStyle='#BDF8FF'; mx.lineWidth=7*k;
+  mx.beginPath();
+  mx.moveTo(cx,sh); mx.lineTo(cx,hip); mx.moveTo(cx-40*k,sh); mx.lineTo(lsx,lsy);
+  mx.moveTo(lsx,lsy); mx.lineTo(ex,ey); mx.lineTo(wx,wy);
+  mx.moveTo(cx-40*k,sh); mx.lineTo(cx-50*k,sh+95*k); mx.lineTo(cx-56*k,sh+180*k);
+  mx.moveTo(cx,hip); mx.lineTo(cx-28*k,hip+80*k); mx.moveTo(cx,hip); mx.lineTo(cx+28*k,hip+80*k);
+  mx.stroke(); mx.beginPath(); mx.arc(cx,sh-44*k,24*k,0,Math.PI*2); mx.stroke(); mx.shadowBlur=0;
+  if (shrug){ mx.fillStyle='rgba(255,92,154,.55)'; mx.shadowColor='#FF5C9A'; mx.shadowBlur=30; mx.beginPath(); mx.arc(lsx,lsy,20*k,0,Math.PI*2); mx.fill(); mx.shadowBlur=0;
+    mx.fillStyle='#FFD3E4'; mx.font=`600 ${15*k}px "IBM Plex Sans Arabic", sans-serif`; mx.textAlign='center'; mx.direction='rtl'; mx.fillText('أرخِ كتفك', lsx, lsy-34*k); mx.direction='ltr'; }
+  // hit
+  if (anim && !anim.hit && !anim.shrug && Math.hypot(wx-tx,wy-ty) < 24*k){ anim.hit=true; crystal=false;
+    for(let i=0;i<70;i++){ const ang=Math.random()*Math.PI*2, sp=1+Math.random()*5; sparks.push({x:tx,y:ty,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,l:1,c:i%3}); }
+    setTimeout(()=>crystal=true, 1400);
+  }
+  mx.globalCompositeOperation='lighter';
+  sparks = sparks.filter(p=>p.l>0);
+  for(const p of sparks){ p.x+=p.vx; p.y+=p.vy; p.vy+=.05; p.vx*=.985; p.l-=.016; const c=hues[p.c];
+    mx.fillStyle=`rgba(${c[0]},${c[1]},${c[2]},${p.l})`; mx.beginPath(); mx.arc(p.x,p.y,2.2*k,0,Math.PI*2); mx.fill(); }
+  mx.globalCompositeOperation='source-over';
+  mx.fillStyle='rgba(234,242,255,.85)'; mx.font=`600 ${14*k}px Unbounded, sans-serif`; mx.textAlign='left';
+  mx.fillText(`Reps ${rep}`, 18*k, 30*k);
+}
+function doRep(){ if (anim) return; rep++; const sh = rep%3===0; anim={t0:performance.now(), peak: sh?118:150, shrug: sh, hit:false}; }
+mc.addEventListener('click', doRep);
+mc.tabIndex=0; mc.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); doRep(); } });
+let mvis=false; new IntersectionObserver(e=>{ mvis=e[0].isIntersecting; if(mvis && !reduce && rep===0) setTimeout(doRep,600); }).observe(mc);
+const mloop=t=>{ if(mvis) mirrorFrame(t); requestAnimationFrame(mloop); }; requestAnimationFrame(mloop);
+if (!reduce) setInterval(()=>{ if(mvis && !anim) doRep(); }, 3400);
 })();
 </script>
 </body>
