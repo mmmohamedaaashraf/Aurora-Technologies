@@ -242,18 +242,19 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
       </div>
       <div class="lab-grid">
         <div class="lab-stage">
-          <svg id="labSvg" viewBox="0 0 600 460" role="img" aria-label="Figure whose arm angle, trunk lean and shoulder shrug follow the controls">
+          <svg id="labSvg" viewBox="0 0 600 480" role="img" aria-label="Figure whose arm angle, trunk lean and shoulder shrug follow the controls">
             <defs>
               <radialGradient id="lg" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#0E1A44"/><stop offset="1" stop-color="#050816"/></radialGradient>
-              <filter id="gl"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <linearGradient id="lbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CFFAFF" stop-opacity=".62"/><stop offset=".55" stop-color="#22D3EE" stop-opacity=".30"/><stop offset="1" stop-color="#8B5CF6" stop-opacity=".14"/></linearGradient>
+              <filter id="lgw" x="-20%" y="-20%" width="140%" height="140%"><feMorphology in="SourceAlpha" operator="dilate" radius="1.2" result="d"/><feComposite in="d" in2="SourceAlpha" operator="out" result="edge"/><feFlood flood-color="#BDF8FF"/><feComposite in2="edge" operator="in" result="edgeC"/><feGaussianBlur in="edgeC" stdDeviation="4" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/><feMergeNode in="edgeC"/></feMerge></filter>
+              <pattern id="lsl" width="6" height="4" patternUnits="userSpaceOnUse"><rect width="6" height="1" fill="#EAF2FF" opacity=".10"/></pattern>
             </defs>
-            <rect width="600" height="460" fill="url(#lg)"/>
-            <line x1="0" y1="430" x2="600" y2="430" stroke="rgba(234,242,255,.1)"/>
+            <rect width="600" height="480" fill="url(#lg)"/>
             <line id="imgV" stroke="#9FB0D4" stroke-width="1.5" stroke-dasharray="4 6"/>
             <line id="trkV" stroke="#3DF5A7" stroke-width="1.5" stroke-dasharray="7 6"/>
             <path id="arcN" fill="none" stroke="#9FB0D4" stroke-width="2"/>
             <path id="arcO" fill="rgba(61,245,167,.15)" stroke="#3DF5A7" stroke-width="2"/>
-            <g id="body" filter="url(#gl)" stroke="#22D3EE" stroke-width="6" stroke-linecap="round" fill="none"></g>
+            <g id="body"></g>
             <circle id="shDot" r="13" fill="none" stroke="#FF5C9A" stroke-width="3" opacity="0"/>
             <circle id="trDot" r="13" fill="none" stroke="#FF5C9A" stroke-width="3" opacity="0"/>
           </svg>
@@ -375,6 +376,84 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
 (function(){
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = id => document.getElementById(id);
+// Shared body geometry: turns joint positions into one silhouette path (union via consistent winding)
+function bodyPath(P, s){
+  const parts = [];
+  const sub=(a,b)=>[a[0]-b[0],a[1]-b[1]], add=(a,b)=>[a[0]+b[0],a[1]+b[1]], mul=(a,k)=>[a[0]*k,a[1]*k];
+  const len=a=>Math.hypot(a[0],a[1]), norm=a=>{const l=len(a)||1;return [a[0]/l,a[1]/l]};
+  const area=pts=>{let A=0;for(let i=0;i<pts.length;i++){const p=pts[i],q=pts[(i+1)%pts.length];A+=p[0]*q[1]-q[0]*p[1];}return A/2;};
+  const poly=pts=>{ if(area(pts)<0) pts=pts.slice().reverse(); parts.push('M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L')+' Z'); };
+  function capsule(A,B,ra,rb){
+    const d=norm(sub(B,A)), n=[-d[1],d[0]], ang=Math.atan2(d[1],d[0]), pts=[];
+    for(let i=0;i<=10;i++){const t=ang+Math.PI/2+Math.PI*i/10; pts.push([A[0]+ra*Math.cos(t),A[1]+ra*Math.sin(t)]);}
+    for(let i=0;i<=10;i++){const t=ang-Math.PI/2+Math.PI*i/10; pts.push([B[0]+rb*Math.cos(t),B[1]+rb*Math.sin(t)]);}
+    poly(pts);
+  }
+  function ellipse(C,rx,ry,rot){ const pts=[]; for(let i=0;i<28;i++){const t=2*Math.PI*i/28,x=rx*Math.cos(t),y=ry*Math.sin(t);pts.push([C[0]+x*Math.cos(rot)-y*Math.sin(rot),C[1]+x*Math.sin(rot)+y*Math.cos(rot)]);} poly(pts); }
+  // trunk frame
+  const hipC=mul(add(P.lh,P.rh),.5), shC=mul(add(P.ls,P.rs),.5);
+  const u=norm(sub(shC,hipC)), r=norm(sub(P.ls,P.rs)); // r points toward figure's left shoulder (screen right)
+  const sw=len(sub(P.ls,P.rs))/2, T=len(sub(shC,hipC));
+  const at=(x,y)=>add(add(hipC,mul(r,x)),mul(u,y));
+  // torso: shoulders follow actual points (shrug), rest in trunk frame
+  const lsTop=add(P.ls,mul(u,10*s)), rsTop=add(P.rs,mul(u,10*s));
+  poly([
+    add(rsTop,mul(r,-4*s)), mul(add(rsTop,lsTop),.5), add(lsTop,mul(r,4*s)),
+    add(add(P.ls,mul(r,15*s)),mul(u,-4*s)), at(sw*1.00,T-30*s), at(sw*0.88,T-62*s), at(sw*0.72,T*0.55),
+    at(sw*0.64,T*0.36), at(sw*0.70,T*0.18), at(sw*0.80,6*s), at(sw*0.62,-24*s), at(0,-32*s),
+    at(-sw*0.62,-24*s), at(-sw*0.80,6*s), at(-sw*0.70,T*0.18), at(-sw*0.64,T*0.36), at(-sw*0.72,T*0.55),
+    at(-sw*0.88,T-62*s), at(-sw*1.00,T-30*s), add(add(P.rs,mul(r,-15*s)),mul(u,-4*s))
+  ]);
+  // neck + head
+  capsule(P.neck, add(P.neck,mul(u,26*s)), 11*s, 10*s);
+  ellipse(P.head, 21*s, 27*s, Math.atan2(u[1],u[0])+Math.PI/2);
+  // arms
+  for(const [S,E,W] of [[P.ls,P.le,P.lw],[P.rs,P.re,P.rw]]){
+    capsule(S,E,13.5*s,11*s); capsule(E,W,11*s,8*s);
+    const hd=norm(sub(W,E)); capsule(W,add(W,mul(hd,22*s)),8.5*s,7*s);
+  }
+  // legs
+  for(const [H,K,A] of [[P.lh,P.lk,P.la],[P.rh,P.rk,P.ra]]){
+    capsule(H,K,18*s,12.5*s); capsule(K,A,12.5*s,8.5*s);
+    capsule(A,add(A,[0,10*s]),8.5*s,7*s);
+  }
+  return parts.join(' ');
+}
+// landmark overlay helpers
+const BONES=[['neck','ls'],['neck','rs'],['ls','le'],['le','lw'],['rs','re'],['re','rw'],['ls','lh'],['rs','rh'],['lh','rh'],['lh','lk'],['lk','la'],['rh','rk'],['rk','ra']];
+const DOTS=['ls','rs','le','re','lw','rw','lh','rh','lk','rk','la','ra'];
+// Standard pose. lean in degrees (trunk tilts to screen-left), arm in degrees from trunk-down toward screen-right.
+function pose(cx, hipY, s, o){
+  o=o||{}; const arm=o.arm||0, shrug=o.shrug||0, lean=(o.lean||0)*Math.PI/180;
+  const R=v=>v*Math.PI/180, rot=(v,d)=>{const c=Math.cos(R(d)),q=Math.sin(R(d));return [v[0]*c-v[1]*q, v[0]*q+v[1]*c]};
+  const u=[-Math.sin(lean),-Math.cos(lean)], r=[-u[1],u[0]], down=[-u[0],-u[1]];
+  const A=(p,v,k)=>[p[0]+v[0]*k*s, p[1]+v[1]*k*s];
+  const hip=[cx,hipY], sh=A(hip,u,200), neck=A(sh,u,2);
+  const ls=A(A(sh,r,46),u,14*shrug), rs=A(sh,r,-46), head=A(neck,u,58);
+  const dl=rot(down,-arm), le=A(ls,dl,105), lw=A(le,rot(dl,-4),95);
+  const dr=rot(down,9), re=A(rs,dr,105), rw=A(re,rot(dr,3),95);
+  const lh=A(hip,r,24), rh=A(hip,r,-24);
+  const lk=[lh[0]+5*s,lh[1]+118*s], la=[lk[0]+3*s,lk[1]+112*s], rk=[rh[0]-5*s,rh[1]+118*s], ra=[rk[0]-3*s,rk[1]+112*s];
+  const tip=A(lw,rot(dl,-4),22);
+  return {hip,neck,head,ls,rs,le,lw,re,rw,lh,rh,lk,la,rk,ra,tip,u,r,down};
+}
+function drawBody(ctx,P,s,o){
+  o=o||{};
+  const path=new Path2D(bodyPath(P,s));
+  const top=P.head[1]-32*s, bot=Math.max(P.la[1],P.ra[1])+22*s;
+  const g=ctx.createLinearGradient(0,top,0,bot);
+  const al=o.alpha||1; g.addColorStop(0,`rgba(207,250,255,${.62*al})`); g.addColorStop(.55,`rgba(34,211,238,${.30*al})`); g.addColorStop(1,`rgba(139,92,246,${.14*al})`);
+  ctx.save(); ctx.shadowColor='rgba(34,211,238,.75)'; ctx.shadowBlur=22*s; ctx.fillStyle=g; ctx.fill(path); ctx.restore();
+  ctx.save(); ctx.clip(path); ctx.fillStyle=`rgba(234,242,255,${.09*(o.alpha||1)})`;
+  for(let y=top;y<bot;y+=5*s) ctx.fillRect(P.hip[0]-400*s,y,800*s,Math.max(1,s));
+  ctx.restore();
+  ctx.save(); ctx.lineCap='round'; ctx.strokeStyle='rgba(234,242,255,.7)'; ctx.lineWidth=Math.max(1,1.6*s);
+  ctx.beginPath(); for(const [a,b] of BONES){ctx.moveTo(...P[a]);ctx.lineTo(...P[b]);} ctx.stroke();
+  ctx.fillStyle='#3DF5A7'; for(const k of DOTS){ctx.beginPath();ctx.arc(P[k][0],P[k][1],Math.max(2.2,4.2*s),0,Math.PI*2);ctx.fill();}
+  if(o.flag){ ctx.strokeStyle='rgba(255,92,154,.95)'; ctx.lineWidth=3; ctx.fillStyle='rgba(255,92,154,.25)'; ctx.beginPath(); ctx.arc(P.ls[0],P.ls[1],22*s,0,Math.PI*2); ctx.fill(); ctx.stroke(); }
+  ctx.restore();
+}
+
 const rad = d => d*Math.PI/180;
 
 /* ================= HERO: aurora drawn by the moving arm ================= */
@@ -392,8 +471,8 @@ let reps = 0, high = false;
 const hues = [[61,245,167],[34,211,238],[139,92,246]];
 
 function figure(t){
-  const scale = Math.min(H/900, W/1300) * 1.1;
-  const cx = W*(W<960?0.72:0.64), hip = H*0.80;
+  const scale = Math.min(H/900, W/1300) * 1.15;
+  const cx = W*(W<960?0.74:0.66), hip = H*0.60;
   const cyc = (t/4800)%1, n = Math.floor(t/4800);
   const shrugRep = n%3 === 2;
   const peak = shrugRep ? 115 : 150;
@@ -403,20 +482,9 @@ function figure(t){
   else if (cyc < .92) a = peak*(.5+.5*Math.cos(Math.PI*(cyc-.55)/.37));
   else a = 0;
   const shrug = shrugRep && a > 70 ? Math.min(1,(a-70)/35) : 0;
-  const s = v => v*scale;
-  const sh = hip - s(230), lsx = cx + s(48), rsx = cx - s(48), lsy = sh - s(14)*shrug;
-  const P = {};
-  P.hip=[cx,hip]; P.neck=[cx,sh]; P.head=[cx,sh-s(52)];
-  P.ls=[lsx,lsy]; P.rs=[rsx,sh];
-  P.le=[lsx+s(110)*Math.sin(rad(a)), lsy+s(110)*Math.cos(rad(a))];
-  P.lw=[P.le[0]+s(100)*Math.sin(rad(a+4)), P.le[1]+s(100)*Math.cos(rad(a+4))];
-  P.re=[rsx-s(10), sh+s(110)]; P.rw=[rsx-s(16), sh+s(210)];
-  P.lh=[cx+s(30),hip]; P.rh=[cx-s(30),hip];
-  P.lk=[cx+s(38),hip+s(120)]; P.rk=[cx-s(38),hip+s(120)];
-  P.la=[cx+s(42),hip+s(235)]; P.ra=[cx-s(42),hip+s(235)];
+  const P = pose(cx, hip, scale, {arm:a, shrug});
   return {P,a,shrug,scale};
 }
-const bones=[['head','neck'],['neck','ls'],['neck','rs'],['ls','le'],['le','lw'],['rs','re'],['re','rw'],['neck','hip'],['hip','lh'],['hip','rh'],['lh','lk'],['rh','rk'],['lk','la'],['rk','ra']];
 
 function ambient(t){
   // slow ribbons of light across the upper sky
@@ -447,7 +515,7 @@ function drawSky(t){
   }
   const {P,a,shrug,scale} = figure(t);
   // aurora curtains from wrist trail
-  trail.push({x:P.lw[0], y:P.lw[1], t});
+  trail.push({x:P.tip[0], y:P.tip[1], t});
   while (trail.length && t - trail[0].t > 2600) trail.shift();
   sx.globalCompositeOperation = 'lighter';
   ambient(t);
@@ -465,17 +533,7 @@ function drawSky(t){
     sx.beginPath(); sx.moveTo(p.x, p.y-drift); sx.lineTo(p.x+Math.sin(i*.3)*6, p.y-drift-len); sx.stroke();
   }
   sx.globalCompositeOperation = 'source-over';
-  // skeleton
-  sx.lineCap='round';
-  sx.shadowColor = 'rgba(34,211,238,.9)'; sx.shadowBlur = 18;
-  sx.strokeStyle = 'rgba(234,242,255,.92)'; sx.lineWidth = Math.max(2, 4*scale);
-  sx.beginPath();
-  for (const [a1,b1] of bones){ sx.moveTo(...P[a1]); sx.lineTo(...P[b1]); }
-  sx.stroke();
-  sx.beginPath(); sx.arc(P.head[0],P.head[1],26*scale,0,Math.PI*2); sx.stroke();
-  sx.shadowBlur = 0;
-  for (const k in P){ if(k==='head') continue; sx.fillStyle='#3DF5A7'; sx.beginPath(); sx.arc(P[k][0],P[k][1],Math.max(2.5,4.5*scale),0,Math.PI*2); sx.fill(); }
-  if (shrug > .3){ sx.strokeStyle='rgba(255,92,154,.95)'; sx.lineWidth=3; sx.beginPath(); sx.arc(P.ls[0],P.ls[1],22*scale+6,0,Math.PI*2); sx.stroke(); }
+  drawBody(sx,P,scale,{flag:shrug>.3, alpha:.38});
   // HUD
   $('hAngle').textContent = Math.round(a)+'°';
   if (a > 140 && !high){ high = true; reps++; $('hReps').textContent = reps; }
@@ -527,35 +585,22 @@ function arc(cx,cy,r,from,to){ // angles measured from "down", clockwise toward 
 function lab(){
   const arm=+$('cArm').value, lean=+$('cLean').value, shrug=$('cShrug').checked;
   $('oArm').textContent=arm+'°'; $('oLean').textContent=lean+'°';
-  body.innerHTML='';
-  const hip=[280,400], L1=150;
-  // trunk tilts toward the right (away from raised arm side makes arm look higher)
-  const tdir=[Math.sin(rad(-lean)), -Math.cos(rad(-lean))]; // up along trunk
-  const neck=[hip[0]+tdir[0]*L1, hip[1]+tdir[1]*L1];
-  const perp=[-tdir[1], tdir[0]]; // to the right of trunk
-  const sw=44, up=shrug?14:0;
-  const ls=[neck[0]-perp[0]*sw*-1 + tdir[0]*up, neck[1]-perp[1]*sw*-1 + tdir[1]*up];
-  const rs=[neck[0]-perp[0]*sw, neck[1]-perp[1]*sw];
-  const head=[neck[0]+tdir[0]*44, neck[1]+tdir[1]*44];
-  // arm angle relative to trunk-down direction, rotating outward (to the right)
-  const down=[-tdir[0],-tdir[1]];
-  const rot=(v,deg)=>{const c=Math.cos(rad(-deg)),s=Math.sin(rad(-deg));return [v[0]*c-v[1]*s, v[0]*s+v[1]*c];};
-  const armDir=rot(down,arm);
-  const el=[ls[0]+armDir[0]*95, ls[1]+armDir[1]*95], wr=[el[0]+armDir[0]*85, el[1]+armDir[1]*85];
-  L(...hip,...neck); L(...ls,...rs); C(...head,24);
-  L(...ls,...el); L(...el,...wr);
-  const rdir=rot(down,-8); L(...rs, rs[0]+rdir[0]*95, rs[1]+rdir[1]*95); L(rs[0]+rdir[0]*95, rs[1]+rdir[1]*95, rs[0]+rdir[0]*180, rs[1]+rdir[1]*180);
-  L(hip[0]-24,hip[1],hip[0]+24,hip[1]); L(hip[0]-24,hip[1],hip[0]-30,hip[1]+30); L(hip[0]+24,hip[1],hip[0]+30,hip[1]+30);
-  // reference axes at shoulder
+  const s=0.68, P=pose(270,310,s,{arm,lean,shrug:shrug?1:0});
+  const pts=k=>P[k][0].toFixed(1)+' '+P[k][1].toFixed(1);
+  body.innerHTML=`<path d="${bodyPath(P,s)}" fill="url(#lbg)" filter="url(#lgw)"/><path d="${bodyPath(P,s)}" fill="url(#lsl)"/>`+
+    `<g stroke="#EAF2FF" stroke-opacity=".7" stroke-width="1.3" stroke-linecap="round">`+BONES.map(([a,b])=>`<line x1="${P[a][0]}" y1="${P[a][1]}" x2="${P[b][0]}" y2="${P[b][1]}"/>`).join('')+`</g>`+
+    `<g fill="#3DF5A7">`+DOTS.map(k=>`<circle cx="${P[k][0]}" cy="${P[k][1]}" r="3.2"/>`).join('')+`</g>`;
+  const ls=P.ls, down=P.down;
   const iv=$('imgV'), tv=$('trkV');
-  iv.setAttribute('x1',ls[0]);iv.setAttribute('y1',ls[1]);iv.setAttribute('x2',ls[0]);iv.setAttribute('y2',ls[1]+120);
-  tv.setAttribute('x1',ls[0]);tv.setAttribute('y1',ls[1]);tv.setAttribute('x2',ls[0]+down[0]*120);tv.setAttribute('y2',ls[1]+down[1]*120);
+  iv.setAttribute('x1',ls[0]);iv.setAttribute('y1',ls[1]);iv.setAttribute('x2',ls[0]);iv.setAttribute('y2',ls[1]+130);
+  tv.setAttribute('x1',ls[0]);tv.setAttribute('y1',ls[1]);tv.setAttribute('x2',ls[0]+down[0]*130);tv.setAttribute('y2',ls[1]+down[1]*130);
   const naive = Math.round(arm + lean);
-  $('arcN').setAttribute('d', arc(ls[0],ls[1],70,0,naive));
-  $('arcO').setAttribute('d', arc(ls[0],ls[1],48,lean,lean+arm)+` L${ls[0]} ${ls[1]} Z`);
+  $('arcN').setAttribute('d', arc(ls[0],ls[1],78,0,naive));
+  $('arcO').setAttribute('d', arc(ls[0],ls[1],52,lean,lean+arm)+` L${ls[0]} ${ls[1]} Z`);
   $('vNaive').textContent = naive+'°'; $('vOurs').textContent = arm+'°';
   const sd=$('shDot'); sd.setAttribute('cx',ls[0]); sd.setAttribute('cy',ls[1]); sd.setAttribute('opacity', shrug?1:0);
-  const td=$('trDot'); td.setAttribute('cx',hip[0]+tdir[0]*80); td.setAttribute('cy',hip[1]+tdir[1]*80); td.setAttribute('opacity', lean>=8?1:0);
+  const mid=[(P.hip[0]+P.neck[0])/2,(P.hip[1]+P.neck[1])/2];
+  const td=$('trDot'); td.setAttribute('cx',mid[0]); td.setAttribute('cy',mid[1]); td.setAttribute('opacity', lean>=8?1:0);
   const msgs=[];
   if (lean>=8) msgs.push('trunk side-bend');
   if (shrug) msgs.push('shoulder shrug');
@@ -574,33 +619,25 @@ const mstars = Array.from({length:70},()=>({x:Math.random(),y:Math.random(),r:Ma
 function mirrorFrame(t){
   mx.fillStyle='rgba(4,7,20,0.35)'; mx.fillRect(0,0,MW,MH);
   for(const s of mstars){ mx.fillStyle='rgba(234,242,255,.5)'; mx.fillRect(s.x*MW,s.y*MH,s.r,s.r); }
-  const k=MH/540, cx=MW*0.40, hip=MH*0.78, sh=hip-180*k;
+  const k=MH/700, cx=MW*0.40, hip=MH*0.64;
   let a=0, shrug=0;
   if (anim){ const p=Math.min(1,(t-anim.t0)/1600); a = anim.peak*Math.sin(Math.PI*p); shrug = anim.shrug && a>60 ? 1:0; if(p>=1) anim=null; }
-  const lsx=cx+40*k, lsy=sh-(shrug?12*k:0);
-  const tx=lsx+190*k*Math.sin(rad(150)), ty=lsy+190*k*Math.cos(rad(150));
-  // target path
+  const P=pose(cx,hip,k,{arm:a,shrug});
+  const lsx=P.ls[0], lsy=P.ls[1], REACH=222*k;
+  const base=pose(cx,hip,k,{arm:0}).ls;
+  const tx=base[0]+REACH*Math.sin(rad(150)), ty=base[1]+REACH*Math.cos(rad(150));
   mx.setLineDash([4,8]); mx.strokeStyle='rgba(242,179,61,.75)'; mx.lineWidth=2; mx.beginPath();
-  for(let d=0; d<=150; d+=3){ const x=lsx+190*k*Math.sin(rad(d)), y=lsy+190*k*Math.cos(rad(d)); d?mx.lineTo(x,y):mx.moveTo(x,y); } mx.stroke(); mx.setLineDash([]);
-  // crystal
+  for(let d=0; d<=150; d+=3){ const x=base[0]+REACH*Math.sin(rad(d)), y=base[1]+REACH*Math.cos(rad(d)); d?mx.lineTo(x,y):mx.moveTo(x,y); } mx.stroke(); mx.setLineDash([]);
   if (crystal){
     const pulse=1+.08*Math.sin(t/300); mx.save(); mx.translate(tx,ty); mx.rotate(t/900); mx.scale(pulse,pulse);
     const g=mx.createLinearGradient(-16,-16,16,16); g.addColorStop(0,'#22D3EE'); g.addColorStop(1,'#8B5CF6');
     mx.fillStyle=g; mx.shadowColor='#22D3EE'; mx.shadowBlur=24; mx.beginPath(); mx.moveTo(0,-20*k); mx.lineTo(13*k,0); mx.lineTo(0,20*k); mx.lineTo(-13*k,0); mx.closePath(); mx.fill(); mx.restore(); mx.shadowBlur=0;
   }
-  // body as light
-  const ex=lsx+100*k*Math.sin(rad(a)), ey=lsy+100*k*Math.cos(rad(a)), wx=ex+92*k*Math.sin(rad(a)), wy=ey+92*k*Math.cos(rad(a));
-  mx.lineCap='round'; mx.shadowColor='#22D3EE'; mx.shadowBlur=22; mx.strokeStyle='#BDF8FF'; mx.lineWidth=7*k;
-  mx.beginPath();
-  mx.moveTo(cx,sh); mx.lineTo(cx,hip); mx.moveTo(cx-40*k,sh); mx.lineTo(lsx,lsy);
-  mx.moveTo(lsx,lsy); mx.lineTo(ex,ey); mx.lineTo(wx,wy);
-  mx.moveTo(cx-40*k,sh); mx.lineTo(cx-50*k,sh+95*k); mx.lineTo(cx-56*k,sh+180*k);
-  mx.moveTo(cx,hip); mx.lineTo(cx-28*k,hip+80*k); mx.moveTo(cx,hip); mx.lineTo(cx+28*k,hip+80*k);
-  mx.stroke(); mx.beginPath(); mx.arc(cx,sh-44*k,24*k,0,Math.PI*2); mx.stroke(); mx.shadowBlur=0;
-  if (shrug){ mx.fillStyle='rgba(255,92,154,.55)'; mx.shadowColor='#FF5C9A'; mx.shadowBlur=30; mx.beginPath(); mx.arc(lsx,lsy,20*k,0,Math.PI*2); mx.fill(); mx.shadowBlur=0;
-    mx.fillStyle='#FFD3E4'; mx.font=`600 ${15*k}px "IBM Plex Sans", sans-serif`; mx.textAlign='center'; mx.fillText('Relax your shoulder', lsx, lsy-34*k); }
+  drawBody(mx,P,k,{flag:shrug, alpha:.75});
+  const wx=P.tip[0], wy=P.tip[1];
+  if (shrug){ mx.fillStyle='#FFD3E4'; mx.font=`600 ${15*k}px "IBM Plex Sans", sans-serif`; mx.textAlign='center'; mx.fillText('Relax your shoulder', lsx, lsy-40*k); }
   // hit
-  if (anim && !anim.hit && !anim.shrug && Math.hypot(wx-tx,wy-ty) < 24*k){ anim.hit=true; crystal=false;
+  if (anim && !anim.hit && !anim.shrug && Math.hypot(wx-tx,wy-ty) < 30*k){ anim.hit=true; crystal=false;
     for(let i=0;i<70;i++){ const ang=Math.random()*Math.PI*2, sp=1+Math.random()*5; sparks.push({x:tx,y:ty,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,l:1,c:i%3}); }
     setTimeout(()=>crystal=true, 1400);
   }
