@@ -44,6 +44,8 @@ h3{font-size:1.15rem;line-height:1.3}
 /* ---------- hero ---------- */
 .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;isolation:isolate}
 #sky{position:absolute;inset:0;width:100%;height:100%;z-index:-1;display:block}
+#hero3d{position:absolute;right:0;top:0;width:64%;height:100%;z-index:-1;display:block}
+@media (max-width:960px){#hero3d{width:100%;opacity:.45}}
 .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:30vh;background:linear-gradient(transparent,var(--night));z-index:-1;pointer-events:none}
 .top{display:flex;justify-content:space-between;align-items:center;padding:26px 0}
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-family:var(--disp);font-weight:600;font-size:1.02rem;letter-spacing:.01em}
@@ -90,7 +92,9 @@ section{padding:130px 0;position:relative}
 /* lab */
 .lab{background:linear-gradient(180deg,var(--night),var(--night2) 30%,var(--night2) 70%,var(--night))}
 .lab-grid{display:grid;grid-template-columns:7fr 5fr;gap:48px;align-items:center}
-.lab-stage{border:1px solid var(--line);border-radius:26px;background:#050816;overflow:hidden}
+.lab-stage{position:relative;border:1px solid var(--line);border-radius:26px;background:radial-gradient(80% 70% at 50% 35%,#0E1A44,#050816);overflow:hidden}
+#lab3d{position:absolute;inset:0;width:100%;height:100%;display:block}
+.lab-stage svg{position:relative}
 .lab-stage svg{display:block;width:100%;height:auto}
 .controls{display:grid;gap:26px}
 .ctl label{display:flex;justify-content:space-between;font-size:.95rem;color:var(--mist);margin-bottom:8px}
@@ -110,7 +114,9 @@ input[type=range]{width:100%;accent-color:var(--green);height:28px}
 
 /* shihab */
 .shihab-grid{display:grid;grid-template-columns:5fr 7fr;gap:56px;align-items:center}
-#mirror{width:100%;aspect-ratio:4/3;display:block;border-radius:26px;border:1px solid var(--line);background:#040714;cursor:pointer}
+.mirror-wrap{position:relative;border-radius:26px;border:1px solid var(--line);background:radial-gradient(90% 80% at 50% 30%,#0E1A44,#040714);overflow:hidden}
+#mirror{position:relative;width:100%;aspect-ratio:4/3;display:block;cursor:pointer;background:transparent}
+#mirror3d{position:absolute;inset:0;width:100%;height:100%;display:block}
 .shihab-word{font-family:var(--disp);font-weight:800;letter-spacing:-0.05em;font-size:clamp(3.6rem,8vw,7rem);line-height:1;color:var(--snow);display:block;margin-bottom:18px;background:linear-gradient(90deg,var(--teal),var(--green),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
 .hint{font-size:.88rem;color:var(--mist);margin-top:12px}
 
@@ -173,6 +179,7 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
 
 <header class="hero">
   <canvas id="sky" aria-hidden="true"></canvas>
+  <canvas id="hero3d" aria-hidden="true"></canvas>
   <div class="wrap" style="width:100%;flex:1;display:flex;flex-direction:column">
     <div class="top">
       <a class="brand" href="#">
@@ -241,7 +248,7 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
         <p>A simple pose tracker measures the arm against the edge of the picture, so leaning sideways makes the arm look higher. Axiora measures against the patient's own trunk, the way the International Society of Biomechanics defines it, and names the compensation.</p>
       </div>
       <div class="lab-grid">
-        <div class="lab-stage">
+        <div class="lab-stage"><canvas id="lab3d" aria-hidden="true"></canvas>
           <svg id="labSvg" viewBox="0 0 600 480" role="img" aria-label="Figure whose arm angle, trunk lean and shoulder shrug follow the controls">
             <defs>
               <radialGradient id="lg" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#0E1A44"/><stop offset="1" stop-color="#050816"/></radialGradient>
@@ -249,7 +256,7 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
               <filter id="lgw" x="-20%" y="-20%" width="140%" height="140%"><feMorphology in="SourceAlpha" operator="dilate" radius="1.2" result="d"/><feComposite in="d" in2="SourceAlpha" operator="out" result="edge"/><feFlood flood-color="#BDF8FF"/><feComposite in2="edge" operator="in" result="edgeC"/><feGaussianBlur in="edgeC" stdDeviation="4" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/><feMergeNode in="edgeC"/></feMerge></filter>
               <pattern id="lsl" width="6" height="4" patternUnits="userSpaceOnUse"><rect width="6" height="1" fill="#EAF2FF" opacity=".10"/></pattern>
             </defs>
-            <rect width="600" height="480" fill="url(#lg)"/>
+            
             <line id="imgV" stroke="#9FB0D4" stroke-width="1.5" stroke-dasharray="4 6"/>
             <line id="trkV" stroke="#3DF5A7" stroke-width="1.5" stroke-dasharray="7 6"/>
             <path id="arcN" fill="none" stroke="#9FB0D4" stroke-width="2"/>
@@ -284,7 +291,7 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
           <p style="color:var(--mist)">On-screen instructions are written in Arabic first.</p>
         </div>
         <div>
-          <canvas id="mirror" aria-label="Shihab demo: click to perform a repetition and break the crystal" role="img"></canvas>
+          <div class="mirror-wrap"><canvas id="mirror3d" aria-hidden="true"></canvas><canvas id="mirror" aria-label="Shihab demo: click to perform a repetition and break the crystal" role="img"></canvas></div>
           <p class="hint">Click or tap the mirror to do a repetition. Every third one, the figure shrugs.</p>
         </div>
       </div>
@@ -376,6 +383,7 @@ footer .ar{font-size:1.4rem;color:var(--snow);margin-bottom:12px;display:block;t
 (function(){
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = id => document.getElementById(id);
+const AX = window.AX = window.AX || {ready:false, hero:{arm:0,shrug:0}, mirror:{arm:0,shrug:0}, lab:{arm:90,lean:0,shrug:0}};
 // Shared body geometry: turns joint positions into one silhouette path (union via consistent winding)
 function bodyPath(P, s){
   const parts = [];
@@ -515,7 +523,9 @@ function drawSky(t){
   }
   const {P,a,shrug,scale} = figure(t);
   // aurora curtains from wrist trail
-  trail.push({x:P.tip[0], y:P.tip[1], t});
+  AX.hero={arm:a,shrug};
+  const hand = AX.ready && AX.heroHand ? AX.heroHand : (AX.ready ? null : P.tip);
+  if (hand) trail.push({x:hand[0], y:hand[1], t});
   while (trail.length && t - trail[0].t > 2600) trail.shift();
   sx.globalCompositeOperation = 'lighter';
   ambient(t);
@@ -533,7 +543,7 @@ function drawSky(t){
     sx.beginPath(); sx.moveTo(p.x, p.y-drift); sx.lineTo(p.x+Math.sin(i*.3)*6, p.y-drift-len); sx.stroke();
   }
   sx.globalCompositeOperation = 'source-over';
-  drawBody(sx,P,scale,{flag:shrug>.3, alpha:.38});
+  if (!AX.ready) drawBody(sx,P,scale,{flag:shrug>.3, alpha:.38});
   // HUD
   $('hAngle').textContent = Math.round(a)+'°';
   if (a > 140 && !high){ high = true; reps++; $('hReps').textContent = reps; }
@@ -585,29 +595,33 @@ function arc(cx,cy,r,from,to){ // angles measured from "down", clockwise toward 
 function lab(){
   const arm=+$('cArm').value, lean=+$('cLean').value, shrug=$('cShrug').checked;
   $('oArm').textContent=arm+'°'; $('oLean').textContent=lean+'°';
-  const s=0.68, P=pose(270,310,s,{arm,lean,shrug:shrug?1:0});
-  const pts=k=>P[k][0].toFixed(1)+' '+P[k][1].toFixed(1);
-  body.innerHTML=`<path d="${bodyPath(P,s)}" fill="url(#lbg)" filter="url(#lgw)"/><path d="${bodyPath(P,s)}" fill="url(#lsl)"/>`+
-    `<g stroke="#EAF2FF" stroke-opacity=".7" stroke-width="1.3" stroke-linecap="round">`+BONES.map(([a,b])=>`<line x1="${P[a][0]}" y1="${P[a][1]}" x2="${P[b][0]}" y2="${P[b][1]}"/>`).join('')+`</g>`+
-    `<g fill="#3DF5A7">`+DOTS.map(k=>`<circle cx="${P[k][0]}" cy="${P[k][1]}" r="3.2"/>`).join('')+`</g>`;
-  const ls=P.ls, down=P.down;
-  const iv=$('imgV'), tv=$('trkV');
-  iv.setAttribute('x1',ls[0]);iv.setAttribute('y1',ls[1]);iv.setAttribute('x2',ls[0]);iv.setAttribute('y2',ls[1]+130);
-  tv.setAttribute('x1',ls[0]);tv.setAttribute('y1',ls[1]);tv.setAttribute('x2',ls[0]+down[0]*130);tv.setAttribute('y2',ls[1]+down[1]*130);
+  AX.lab={arm,lean,shrug:shrug?1:0};
   const naive = Math.round(arm + lean);
-  $('arcN').setAttribute('d', arc(ls[0],ls[1],78,0,naive));
-  $('arcO').setAttribute('d', arc(ls[0],ls[1],52,lean,lean+arm)+` L${ls[0]} ${ls[1]} Z`);
   $('vNaive').textContent = naive+'°'; $('vOurs').textContent = arm+'°';
-  const sd=$('shDot'); sd.setAttribute('cx',ls[0]); sd.setAttribute('cy',ls[1]); sd.setAttribute('opacity', shrug?1:0);
-  const mid=[(P.hip[0]+P.neck[0])/2,(P.hip[1]+P.neck[1])/2];
-  const td=$('trDot'); td.setAttribute('cx',mid[0]); td.setAttribute('cy',mid[1]); td.setAttribute('opacity', lean>=8?1:0);
   const msgs=[];
   if (lean>=8) msgs.push('trunk side-bend');
   if (shrug) msgs.push('shoulder shrug');
   $('verdict').innerHTML = msgs.length
     ? `<span class="w">Compensation: ${msgs.join(' and ')}.</span> The simple tracker reports ${naive}°; the real shoulder movement is ${arm}°.`
     : (lean>0 ? `Small lean. Axiora still reports the true ${arm}°.` : 'Clean movement. Both agree.');
+  if (!AX.ready){ // 2D fallback
+    const s2=0.68, P=pose(270,310,s2,{arm,lean,shrug:shrug?1:0});
+    body.innerHTML=`<path d="${bodyPath(P,s2)}" fill="url(#lbg)" filter="url(#lgw)"/>`;
+    labOverlay({shoulder:P.ls, down:P.down, mid:[(P.hip[0]+P.neck[0])/2,(P.hip[1]+P.neck[1])/2]});
+  } else body.innerHTML='';
 }
+function labOverlay(pr){
+  if (pr) AX.lproj=pr; pr=AX.lproj; if(!pr) return;
+  const {arm,lean,shrug}=AX.lab, ls=pr.shoulder, down=pr.down;
+  const iv=$('imgV'), tv=$('trkV');
+  iv.setAttribute('x1',ls[0]);iv.setAttribute('y1',ls[1]);iv.setAttribute('x2',ls[0]);iv.setAttribute('y2',ls[1]+130);
+  tv.setAttribute('x1',ls[0]);tv.setAttribute('y1',ls[1]);tv.setAttribute('x2',ls[0]+down[0]*130);tv.setAttribute('y2',ls[1]+down[1]*130);
+  $('arcN').setAttribute('d', arc(ls[0],ls[1],78,0,Math.round(arm+lean)));
+  $('arcO').setAttribute('d', arc(ls[0],ls[1],52,lean,lean+arm)+` L${ls[0]} ${ls[1]} Z`);
+  const sd=$('shDot'); sd.setAttribute('cx',ls[0]); sd.setAttribute('cy',ls[1]); sd.setAttribute('opacity', shrug?1:0);
+  const td=$('trDot'); td.setAttribute('cx',pr.mid[0]); td.setAttribute('cy',pr.mid[1]); td.setAttribute('opacity', lean>=8?1:0);
+}
+window.labOverlay=labOverlay;
 ['cArm','cLean','cShrug'].forEach(id=>$(id).addEventListener('input',lab)); lab();
 
 /* ================= Shihab mirror ================= */
@@ -617,14 +631,15 @@ function msize(){ const d=Math.min(devicePixelRatio||1,2); MW=mc.clientWidth; MH
 msize(); addEventListener('resize', msize);
 const mstars = Array.from({length:70},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.4+.3}));
 function mirrorFrame(t){
-  mx.fillStyle='rgba(4,7,20,0.35)'; mx.fillRect(0,0,MW,MH);
+  mx.clearRect(0,0,MW,MH);
   for(const s of mstars){ mx.fillStyle='rgba(234,242,255,.5)'; mx.fillRect(s.x*MW,s.y*MH,s.r,s.r); }
   const k=MH/700, cx=MW*0.40, hip=MH*0.64;
   let a=0, shrug=0;
   if (anim){ const p=Math.min(1,(t-anim.t0)/1600); a = anim.peak*Math.sin(Math.PI*p); shrug = anim.shrug && a>60 ? 1:0; if(p>=1) anim=null; }
-  const P=pose(cx,hip,k,{arm:a,shrug});
-  const lsx=P.ls[0], lsy=P.ls[1], REACH=222*k;
-  const base=pose(cx,hip,k,{arm:0}).ls;
+  AX.mirror={arm:a,shrug};
+  let base, REACH, wx, wy, lsx, lsy;
+  if (AX.ready && AX.mproj){ base=AX.mproj.shoulder0; REACH=AX.mproj.reach; [wx,wy]=AX.mproj.hand; [lsx,lsy]=AX.mproj.shoulder; }
+  else { const P=pose(cx,hip,k,{arm:a,shrug}); base=pose(cx,hip,k,{arm:0}).ls; REACH=222*k; [wx,wy]=P.tip; [lsx,lsy]=P.ls; if(!AX.ready) drawBody(mx,P,k,{flag:shrug, alpha:.75}); }
   const tx=base[0]+REACH*Math.sin(rad(150)), ty=base[1]+REACH*Math.cos(rad(150));
   mx.setLineDash([4,8]); mx.strokeStyle='rgba(242,179,61,.75)'; mx.lineWidth=2; mx.beginPath();
   for(let d=0; d<=150; d+=3){ const x=base[0]+REACH*Math.sin(rad(d)), y=base[1]+REACH*Math.cos(rad(d)); d?mx.lineTo(x,y):mx.moveTo(x,y); } mx.stroke(); mx.setLineDash([]);
@@ -633,11 +648,10 @@ function mirrorFrame(t){
     const g=mx.createLinearGradient(-16,-16,16,16); g.addColorStop(0,'#22D3EE'); g.addColorStop(1,'#8B5CF6');
     mx.fillStyle=g; mx.shadowColor='#22D3EE'; mx.shadowBlur=24; mx.beginPath(); mx.moveTo(0,-20*k); mx.lineTo(13*k,0); mx.lineTo(0,20*k); mx.lineTo(-13*k,0); mx.closePath(); mx.fill(); mx.restore(); mx.shadowBlur=0;
   }
-  drawBody(mx,P,k,{flag:shrug, alpha:.75});
-  const wx=P.tip[0], wy=P.tip[1];
-  if (shrug){ mx.fillStyle='#FFD3E4'; mx.font=`600 ${15*k}px "IBM Plex Sans", sans-serif`; mx.textAlign='center'; mx.fillText('Relax your shoulder', lsx, lsy-40*k); }
+  if (shrug){ mx.fillStyle='rgba(255,92,154,.35)'; mx.shadowColor='#FF5C9A'; mx.shadowBlur=30; mx.beginPath(); mx.arc(lsx,lsy,20*k*1.4,0,Math.PI*2); mx.fill(); mx.shadowBlur=0;
+    mx.fillStyle='#FFD3E4'; mx.font=`600 ${15*k*1.3}px "IBM Plex Sans", sans-serif`; mx.textAlign='center'; mx.fillText('Relax your shoulder', lsx, lsy-48*k); }
   // hit
-  if (anim && !anim.hit && !anim.shrug && Math.hypot(wx-tx,wy-ty) < 30*k){ anim.hit=true; crystal=false;
+  if (anim && !anim.hit && !anim.shrug && Math.hypot(wx-tx,wy-ty) < 40*k){ anim.hit=true; crystal=false;
     for(let i=0;i<70;i++){ const ang=Math.random()*Math.PI*2, sp=1+Math.random()*5; sparks.push({x:tx,y:ty,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,l:1,c:i%3}); }
     setTimeout(()=>crystal=true, 1400);
   }
@@ -656,6 +670,105 @@ let mvis=false; new IntersectionObserver(e=>{ mvis=e[0].isIntersecting; if(mvis 
 const mloop=t=>{ if(mvis) mirrorFrame(t); requestAnimationFrame(mloop); }; requestAnimationFrame(mloop);
 if (!reduce) setInterval(()=>{ if(mvis && !anim) doRep(); }, 3400);
 })();
+</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import * as SU from 'three/addons/utils/SkeletonUtils.js';
+const AX = window.AX, D = Math.PI/180;
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let gltf;
+try { gltf = await new GLTFLoader().loadAsync('Xbot.glb'); } catch(e){ console.warn('3D model unavailable', e); throw e; }
+
+const bodyMat = new THREE.MeshPhysicalMaterial({color:0x14294d, roughness:.26, metalness:.4, clearcoat:1, clearcoatRoughness:.18, sheen:1, sheenColor:new THREE.Color(0x22d3ee), sheenRoughness:.5});
+const jointMat = new THREE.MeshStandardMaterial({color:0x0b1a2e, emissive:0x3df5a7, emissiveIntensity:1.5, roughness:.3, metalness:.2});
+
+function makeModel(){
+  const m = SU.clone(gltf.scene);
+  m.traverse(o=>{ if(o.isMesh){ o.frustumCulled=false; o.material = /Joint/i.test(o.material.name) ? jointMat : bodyMat; } });
+  const b={}; m.traverse(o=>{ if(o.isBone) b[o.name.replace('mixamorig','').replace(':','')]=o; });
+  const base={la:b.LeftArm.rotation.z, ra:b.RightArm.rotation.z, sp:b.Spine.rotation.z, sh:b.LeftShoulder.rotation.z};
+  const flag = new THREE.Mesh(new THREE.SphereGeometry(.075,24,16), new THREE.MeshBasicMaterial({color:0xff5c9a, transparent:true, opacity:.55, depthTest:false}));
+  flag.renderOrder=10; m.add(flag);
+  return {m,b,base,flag};
+}
+function setPose(M,{arm=0,lean=0,shrug=0}){
+  M.b.LeftArm.rotation.z = M.base.la + (arm-93)*D;
+  M.b.RightArm.rotation.z = M.base.ra + 93*D;
+  M.b.Spine.rotation.z = M.base.sp + lean*D;
+  M.b.LeftShoulder.rotation.z = M.base.sh - 12*shrug*D;
+  M.m.updateMatrixWorld(true);
+  M.flag.visible = shrug>.3;
+  if (M.flag.visible){ const p=M.b.LeftArm.getWorldPosition(new THREE.Vector3()); M.m.worldToLocal(p); M.flag.position.copy(p); }
+}
+const W=(o)=>o.getWorldPosition(new THREE.Vector3());
+function lights(scene){
+  scene.add(new THREE.HemisphereLight(0xbfe9ff,0x1a1040,1.1));
+  const k=new THREE.DirectionalLight(0xffffff,2.1); k.position.set(2,3,3); scene.add(k);
+  const r1=new THREE.DirectionalLight(0x22d3ee,3.2); r1.position.set(-3,2,-2); scene.add(r1);
+  const r2=new THREE.DirectionalLight(0x8b5cf6,2.2); r2.position.set(3,1,-3); scene.add(r2);
+}
+function stage(canvas, cam, viewH){
+  const r=new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  r.setPixelRatio(Math.min(devicePixelRatio||1,2)); r.outputColorSpace=THREE.SRGBColorSpace; r.toneMapping=THREE.ACESFilmicToneMapping;
+  const scene=new THREE.Scene(); lights(scene); const M=makeModel(); scene.add(M.m);
+  const st={r,scene,cam,M,canvas,visible:false};
+  const fit=()=>{ const w=canvas.clientWidth||1, h=canvas.clientHeight||1; r.setSize(w,h,false);
+    if (cam.isPerspectiveCamera) cam.aspect=w/h; else { cam.left=-viewH*w/h/2; cam.right=viewH*w/h/2; cam.top=viewH/2; cam.bottom=-viewH/2; }
+    cam.updateProjectionMatrix(); };
+  fit(); new ResizeObserver(fit).observe(canvas);
+  new IntersectionObserver(e=>st.visible=e[0].isIntersecting).observe(canvas);
+  st.px=v=>{ const p=v.clone().project(cam); return [(p.x+1)/2*canvas.clientWidth, (1-p.y)/2*canvas.clientHeight]; };
+  return st;
+}
+function ortho(cy){ const c=new THREE.OrthographicCamera(-1,1,1,-1,.1,50); c.position.set(0,cy,6); c.lookAt(0,cy,0); return c; }
+
+// ---- hero (perspective, 3/4 view)
+const heroCam=new THREE.PerspectiveCamera(30,1,.1,100); heroCam.position.set(1.25,1.3,5.0); heroCam.lookAt(0.05,1.18,0);
+const hero=stage(document.getElementById('hero3d'), heroCam);
+hero.M.m.position.x=-0.42;
+// ---- mirror (front ortho)
+const mirror=stage(document.getElementById('mirror3d'), ortho(1.2), 2.48); mirror.M.m.position.x=-0.35;
+// ---- lab (front ortho)
+const lab=stage(document.getElementById('lab3d'), ortho(1.18), 2.55); lab.M.m.position.x=-0.25;
+
+const sky=document.getElementById('sky');
+function tipOf(M){ return W(M.b.LeftHandMiddle4 || M.b.LeftHandMiddle3 || M.b.LeftHand); }
+AX.ready=true;
+let lastLab='';
+function frame(t){
+  if (hero.visible){
+    hero.M.m.rotation.y = reduce ? 0 : 0.12*Math.sin(t/3800);
+    setPose(hero.M, AX.hero); hero.r.render(hero.scene, hero.cam);
+    const h=hero.px(tipOf(hero.M)), a=hero.canvas.getBoundingClientRect(), b=sky.getBoundingClientRect();
+    AX.heroHand=[h[0]+a.left-b.left, h[1]+a.top-b.top];
+  }
+  if (mirror.visible){
+    setPose(mirror.M, AX.mirror); mirror.r.render(mirror.scene, mirror.cam);
+    const sh=mirror.px(W(mirror.M.b.LeftArm)), hand=mirror.px(tipOf(mirror.M));
+    if (!AX.mproj || !AX.mirror.arm){ const s0=sh; AX.mproj={...(AX.mproj||{}), shoulder0:s0}; }
+    AX.mproj={...AX.mproj, shoulder:sh, hand, reach: AX.mproj.reach || Math.hypot(hand[0]-sh[0],hand[1]-sh[1])};
+  }
+  if (lab.visible){
+    const key=JSON.stringify(AX.lab);
+    if (key!==lastLab){ lastLab=key;
+      setPose(lab.M, AX.lab); lab.r.render(lab.scene, lab.cam);
+      const k=600/lab.canvas.clientWidth;
+      const sp=v=>{const p=lab.px(v); return [p[0]*k,p[1]*k];};
+      const sh=sp(W(lab.M.b.LeftArm)), top=sp(W(lab.M.b.Spine2)), hip=sp(W(lab.M.b.Hips));
+      const dv=[hip[0]-top[0],hip[1]-top[1]], L=Math.hypot(...dv);
+      window.labOverlay({shoulder:sh, down:[dv[0]/L,dv[1]/L], mid:[(top[0]+hip[0])/2,(top[1]+hip[1])/2]});
+    }
+  }
+  requestAnimationFrame(frame);
+}
+// warm-up so reach and overlays exist before first visibility
+setPose(mirror.M,{arm:0}); mirror.r.render(mirror.scene,mirror.cam);
+{ const sh=mirror.px(W(mirror.M.b.LeftArm)), hand=mirror.px(tipOf(mirror.M)); AX.mproj={shoulder0:sh, shoulder:sh, hand, reach:Math.hypot(hand[0]-sh[0],hand[1]-sh[1])}; }
+new ResizeObserver(()=>{ lastLab=''; if(AX.mproj){ setPose(mirror.M,{arm:0}); mirror.r.render(mirror.scene,mirror.cam); const sh=mirror.px(W(mirror.M.b.LeftArm)), hand=mirror.px(tipOf(mirror.M)); AX.mproj={shoulder0:sh, shoulder:sh, hand, reach:Math.hypot(hand[0]-sh[0],hand[1]-sh[1])}; } }).observe(document.getElementById('mirror3d'));
+document.getElementById('body').innerHTML='';
+requestAnimationFrame(frame);
 </script>
 </body>
 </html>
